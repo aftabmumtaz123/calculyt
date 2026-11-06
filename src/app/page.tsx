@@ -1,6 +1,275 @@
 import Link from "next/link";
-import { ArrowUpRight, Activity, Wallet, Sigma, Grid3X3, Search, Sparkles, Calculator, TrendingUp, Flame, Percent, CalendarDays, Fuel, GraduationCap, PiggyBank, House } from "lucide-react";
-import { calculators,categories } from "@/lib/calculators/definitions";
-const icons:Record<string,React.ElementType>={Wallet,Activity,Sigma,Grid3X3,TrendingUp,Flame,Percent,CalendarDays,Fuel,GraduationCap,PiggyBank,House};
-export default function Home(){const featured=calculators.filter(c=>c.featured);return <main><section className="container-shell pb-12 pt-14 md:pb-16 md:pt-20"><div className="grid items-center gap-10 lg:grid-cols-[1.15fr_.85fr]"><div><div className="mb-5 inline-flex items-center gap-2 rounded-full border border-violet-100 bg-white px-3 py-1.5 text-xs font-bold text-violet-700"><Sparkles size={13}/> A clearer way to calculate</div><h1 className="max-w-3xl text-5xl font-extrabold leading-[1.08] md:text-6xl">Make numbers work <span className="text-violet-600">for you.</span></h1><p className="mt-6 max-w-xl text-lg leading-8 text-muted">Thoughtful calculators for everyday decisions. Get clear answers, useful breakdowns and visual insights — without the guesswork.</p><div className="mt-8 flex flex-wrap gap-3"><a href="#all-calculators" className="btn-primary inline-flex items-center gap-2">Explore calculators <ArrowUpRight size={17}/></a><a href="#categories" className="rounded-xl border border-[#e5e1ed] bg-white px-5 py-3 font-semibold hover:border-violet-300">Browse categories</a></div><div className="mt-9 flex flex-wrap gap-6 text-sm text-muted"><span>✓ Free to use</span><span>✓ No sign-up required</span><span>✓ Results explained</span></div></div><div className="relative"><div className="absolute -inset-5 rounded-[36px] bg-gradient-to-br from-[#e9e0ff] via-transparent to-[#ffe9cf] blur-2xl opacity-80"/><div className="card relative overflow-hidden p-6 md:p-7"><div className="flex items-center justify-between"><div><p className="text-xs font-bold uppercase tracking-[.15em] text-violet-600">Featured tool</p><h2 className="mt-2 text-2xl font-extrabold">Compound growth</h2></div><span className="grid h-11 w-11 place-items-center rounded-2xl bg-violet-50 text-violet-600"><TrendingUp/></span></div><p className="mt-2 text-sm text-muted">See how small, consistent contributions can add up.</p><div className="mt-8 rounded-2xl bg-[#f7f4fc] p-4"><div className="flex items-end justify-between"><div><p className="text-xs text-muted">Illustrative future value</p><p className="mt-1 text-3xl font-extrabold">$52,480</p></div><span className="rounded-full bg-[#e2f7ee] px-2.5 py-1 text-xs font-bold text-[#16865c]">+ growth</span></div><svg viewBox="0 0 420 130" className="mt-4 w-full" role="img" aria-label="Illustrative rising investment growth line"><defs><linearGradient id="fill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stopColor="#7954c8" stopOpacity=".25"/><stop offset="1" stopColor="#7954c8" stopOpacity="0"/></linearGradient></defs><path d="M4 116 C55 111 65 105 105 100 S160 80 200 84 S258 55 292 59 S355 14 416 8 L416 128 L4 128Z" fill="url(#fill)"/><path d="M4 116 C55 111 65 105 105 100 S160 80 200 84 S258 55 292 59 S355 14 416 8" fill="none" stroke="#7954c8" strokeWidth="4" strokeLinecap="round"/><path d="M4 122 C75 120 130 116 200 112 S320 101 416 95" fill="none" stroke="#f49a35" strokeWidth="3" strokeLinecap="round"/></svg><div className="flex justify-between text-[11px] text-muted"><span>Today</span><span>Year 5</span><span>Year 10</span><span>Year 15</span></div></div><Link href="/calculators/compound-interest" className="mt-5 flex items-center justify-between rounded-xl bg-[#211444] px-4 py-3 text-sm font-semibold text-white hover:bg-violet-700">Try compound interest <ArrowUpRight size={17}/></Link></div></div></div></section><section id="categories" className="border-y border-[#ebe8f1] bg-white py-12"><div className="container-shell"><div className="mb-7 flex items-end justify-between"><div><p className="text-xs font-bold uppercase tracking-[.15em] text-violet-600">Explore by category</p><h2 className="mt-2 text-3xl font-extrabold">What are you working on?</h2></div><span className="hidden text-sm text-muted sm:block">Find the right tool for the question.</span></div><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{categories.map(cat=>{const Icon=icons[cat.icon]??Calculator;const count=calculators.filter(c=>c.category===cat.name).length;return <a key={cat.name} href={`#${cat.name.toLowerCase().replaceAll(" & ","-").replaceAll(" ","-")}`} className="rounded-2xl border border-[#eeebf3] p-5 transition hover:-translate-y-1 hover:border-violet-200 hover:shadow-soft"><span className="grid h-11 w-11 place-items-center rounded-xl bg-violet-50 text-violet-600"><Icon size={21}/></span><h3 className="mt-4 font-bold">{cat.name}</h3><p className="mt-1 text-sm leading-6 text-muted">{cat.description}</p><p className="mt-4 text-xs font-bold text-violet-600">{count} available tools <ArrowUpRight className="inline" size={13}/></p></a>})}</div></div></section><section id="popular" className="container-shell py-14"><div className="mb-7"><p className="text-xs font-bold uppercase tracking-[.15em] text-violet-600">Start with the essentials</p><h2 className="mt-2 text-3xl font-extrabold">Popular calculators</h2></div><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{featured.map(c=><ToolCard key={c.slug} c={c}/>)}</div></section><section id="all-calculators" className="container-shell pb-16"><div className="mb-8"><p className="text-xs font-bold uppercase tracking-[.15em] text-violet-600">The toolkit</p><h2 className="mt-2 text-3xl font-extrabold">Explore all available tools</h2><p className="mt-2 text-muted">A growing set of practical calculators, organized to help you get to an answer faster.</p></div>{categories.map(cat=>{const list=calculators.filter(c=>c.category===cat.name);const id=cat.name.toLowerCase().replaceAll(" & ","-").replaceAll(" ","-");return <div id={id} key={cat.name} className="mb-9 scroll-mt-28"><div className="mb-4 flex items-center justify-between"><h3 className="text-xl font-extrabold">{cat.name}</h3><span className="text-xs text-muted">{list.length} tools</span></div><div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{list.map(c=><ToolCard key={c.slug} c={c}/>)}</div></div>})}</section></main>}
-function ToolCard({c}:{c:(typeof calculators)[number]}){const Icon=icons[c.icon]??Calculator;return <Link href={`/calculators/${c.slug}`} className="group flex items-center gap-4 rounded-2xl border border-[#eeebf3] bg-white p-4 transition hover:-translate-y-0.5 hover:border-violet-200 hover:shadow-soft"><span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-[#f5f1fc] text-violet-600"><Icon size={20}/></span><span className="min-w-0 flex-1"><span className="block truncate text-sm font-bold">{c.name}</span><span className="mt-1 block line-clamp-2 text-xs leading-5 text-muted">{c.description}</span></span><ArrowUpRight size={17} className="shrink-0 text-[#aaa5b8] transition group-hover:text-violet-600"/></Link>}
+import {
+  ArrowUpRight,
+  Activity,
+  Wallet,
+  Sigma,
+  Grid3X3,
+  Search,
+  Sparkles,
+  Calculator,
+  TrendingUp,
+  Flame,
+  Percent,
+  CalendarDays,
+  Fuel,
+  GraduationCap,
+  PiggyBank,
+  House,
+} from "lucide-react";
+import { calculators, categories } from "@/lib/calculators/definitions";
+import catalog from "@/lib/calculators/catalog.json";
+const icons: Record<string, React.ElementType> = {
+  Wallet,
+  Activity,
+  Sigma,
+  Grid3X3,
+  TrendingUp,
+  Flame,
+  Percent,
+  CalendarDays,
+  Fuel,
+  GraduationCap,
+  PiggyBank,
+  House,
+};
+export default function Home() {
+  const featured = calculators.filter((c) => c.featured);
+  return (
+    <main>
+      <section className="container-shell pb-12 pt-14 md:pb-16 md:pt-20">
+        <div className="grid items-center gap-10 lg:grid-cols-[1.15fr_.85fr]">
+          <div>
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-violet-100 bg-white px-3 py-1.5 text-xs font-bold text-violet-700">
+              <Sparkles size={13} /> A clearer way to calculate
+            </div>
+            <h1 className="max-w-3xl text-5xl font-extrabold leading-[1.08] md:text-6xl">
+              Make numbers work{" "}
+              <span className="text-violet-600">for you.</span>
+            </h1>
+            <p className="mt-6 max-w-xl text-lg leading-8 text-muted">
+              Thoughtful calculators for everyday decisions. Get clear answers,
+              useful breakdowns and visual insights — without the guesswork.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a
+                href="#all-calculators"
+                className="btn-primary inline-flex items-center gap-2"
+              >
+                Explore calculators <ArrowUpRight size={17} />
+              </a>
+              <a
+                href="#categories"
+                className="rounded-xl border border-[#e5e1ed] bg-white px-5 py-3 font-semibold hover:border-violet-300"
+              >
+                Browse categories
+              </a>
+            </div>
+            <div className="mt-9 flex flex-wrap gap-6 text-sm text-muted">
+              <span>✓ Free to use</span>
+              <span>✓ No sign-up required</span>
+              <span>✓ Results explained</span>
+            </div>
+          </div>
+          <div className="relative">
+            <div className="absolute -inset-5 rounded-[36px] bg-gradient-to-br from-[#e9e0ff] via-transparent to-[#ffe9cf] blur-2xl opacity-80" />
+            <div className="card relative overflow-hidden p-6 md:p-7">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[.15em] text-violet-600">
+                    Featured tool
+                  </p>
+                  <h2 className="mt-2 text-2xl font-extrabold">
+                    Compound growth
+                  </h2>
+                </div>
+                <span className="grid h-11 w-11 place-items-center rounded-2xl bg-violet-50 text-violet-600">
+                  <TrendingUp />
+                </span>
+              </div>
+              <p className="mt-2 text-sm text-muted">
+                See how small, consistent contributions can add up.
+              </p>
+              <div className="mt-8 rounded-2xl bg-[#f7f4fc] p-4">
+                <div className="flex items-end justify-between">
+                  <div>
+                    <p className="text-xs text-muted">
+                      Illustrative future value
+                    </p>
+                    <p className="mt-1 text-3xl font-extrabold">$52,480</p>
+                  </div>
+                  <span className="rounded-full bg-[#e2f7ee] px-2.5 py-1 text-xs font-bold text-[#16865c]">
+                    + growth
+                  </span>
+                </div>
+                <svg
+                  viewBox="0 0 420 130"
+                  className="mt-4 w-full"
+                  role="img"
+                  aria-label="Illustrative rising investment growth line"
+                >
+                  <defs>
+                    <linearGradient id="fill" x1="0" x2="0" y1="0" y2="1">
+                      <stop offset="0" stopColor="#7954c8" stopOpacity=".25" />
+                      <stop offset="1" stopColor="#7954c8" stopOpacity="0" />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    d="M4 116 C55 111 65 105 105 100 S160 80 200 84 S258 55 292 59 S355 14 416 8 L416 128 L4 128Z"
+                    fill="url(#fill)"
+                  />
+                  <path
+                    d="M4 116 C55 111 65 105 105 100 S160 80 200 84 S258 55 292 59 S355 14 416 8"
+                    fill="none"
+                    stroke="#7954c8"
+                    strokeWidth="4"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M4 122 C75 120 130 116 200 112 S320 101 416 95"
+                    fill="none"
+                    stroke="#f49a35"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                  />
+                </svg>
+                <div className="flex justify-between text-[11px] text-muted">
+                  <span>Today</span>
+                  <span>Year 5</span>
+                  <span>Year 10</span>
+                  <span>Year 15</span>
+                </div>
+              </div>
+              <Link
+                href="/calculators/compound-interest"
+                className="mt-5 flex items-center justify-between rounded-xl bg-[#211444] px-4 py-3 text-sm font-semibold text-white hover:bg-violet-700"
+              >
+                Try compound interest <ArrowUpRight size={17} />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section
+        id="categories"
+        className="border-y border-[#ebe8f1] bg-white py-12"
+      >
+        <div className="container-shell">
+          <div className="mb-7 flex items-end justify-between">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[.15em] text-violet-600">
+                Explore by category
+              </p>
+              <h2 className="mt-2 text-3xl font-extrabold">
+                What are you working on?
+              </h2>
+            </div>
+            <Link
+              href="/sitemap.html"
+              className="hidden text-sm font-semibold text-violet-700 hover:underline sm:block"
+            >
+              View full calculator directory →
+            </Link>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {categories.map((cat) => {
+              const Icon = icons[cat.icon] ?? Calculator;
+              const count = catalog.filter(
+                (c) => c.category === cat.name,
+              ).length;
+              return (
+                <a
+                  key={cat.name}
+                  href={`/categories/${cat.name.toLowerCase().replaceAll(" & ", "-").replaceAll(" ", "-")}`}
+                  className="rounded-2xl border border-[#eeebf3] p-5 transition hover:-translate-y-1 hover:border-violet-200 hover:shadow-soft"
+                >
+                  <span className="grid h-11 w-11 place-items-center rounded-xl bg-violet-50 text-violet-600">
+                    <Icon size={21} />
+                  </span>
+                  <h3 className="mt-4 font-bold">{cat.name}</h3>
+                  <p className="mt-1 text-sm leading-6 text-muted">
+                    {cat.description}
+                  </p>
+                  <p className="mt-4 text-xs font-bold text-violet-600">
+                    {count} calculators in directory{" "}
+                    <ArrowUpRight className="inline" size={13} />
+                  </p>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+      <section id="popular" className="container-shell py-14">
+        <div className="mb-7">
+          <p className="text-xs font-bold uppercase tracking-[.15em] text-violet-600">
+            Start with the essentials
+          </p>
+          <h2 className="mt-2 text-3xl font-extrabold">Popular calculators</h2>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {featured.map((c) => (
+            <ToolCard key={c.slug} c={c} />
+          ))}
+        </div>
+      </section>
+      <section id="all-calculators" className="container-shell pb-16">
+        <div className="mb-8">
+          <p className="text-xs font-bold uppercase tracking-[.15em] text-violet-600">
+            The toolkit
+          </p>
+          <h2 className="mt-2 text-3xl font-extrabold">
+            Explore all available tools
+          </h2>
+          <p className="mt-2 text-muted">
+            A growing set of practical calculators, organized to help you get to
+            an answer faster.
+          </p>
+        </div>
+        {categories.map((cat) => {
+          const list = calculators.filter((c) => c.category === cat.name);
+          const id = cat.name
+            .toLowerCase()
+            .replaceAll(" & ", "-")
+            .replaceAll(" ", "-");
+          return (
+            <div id={id} key={cat.name} className="mb-9 scroll-mt-28">
+              <div className="mb-4 flex items-center justify-between">
+                <h3 className="text-xl font-extrabold">{cat.name}</h3>
+                <span className="text-xs text-muted">{list.length} tools</span>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {list.map((c) => (
+                  <ToolCard key={c.slug} c={c} />
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </section>
+    </main>
+  );
+}
+function ToolCard({ c }: { c: (typeof calculators)[number] }) {
+  const Icon = icons[c.icon] ?? Calculator;
+  return (
+    <Link
+      href={`/calculators/${c.slug}`}
+      className="group flex items-center gap-4 rounded-2xl border border-[#eeebf3] bg-white p-4 transition hover:-translate-y-0.5 hover:border-violet-200 hover:shadow-soft"
+    >
+      <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-[#f5f1fc] text-violet-600">
+        <Icon size={20} />
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="block truncate text-sm font-bold">{c.name}</span>
+        <span className="mt-1 block line-clamp-2 text-xs leading-5 text-muted">
+          {c.description}
+        </span>
+      </span>
+      <ArrowUpRight
+        size={17}
+        className="shrink-0 text-[#aaa5b8] transition group-hover:text-violet-600"
+      />
+    </Link>
+  );
+}

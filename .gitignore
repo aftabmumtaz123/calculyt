@@ -1,6 +1,5 @@
 node_modules
-next
+.next
 out
 dist
-.env*
-coverage
+.env

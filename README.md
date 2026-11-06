@@ -26,7 +26,7 @@ A modern Next.js App Router + TypeScript calculator platform foundation with a p
 
 Total implemented in this starter: **16**.
 
-The full reference inventory is included as `COMPLETE_CALCULATOR_INVENTORY.md`. The 205 entries in that research inventory are discovered tools, not implemented calculators. The remaining tools are intentionally not represented as working pages or fake calculations.
+The full reference inventory is included as `COMPLETE_CALCULATOR_INVENTORY.md`. The 204 entries in that research inventory are discovered tools, not implemented calculators. The remaining tools are intentionally not represented as working pages or fake calculations.
 
 ## Requirements
 
@@ -99,3 +99,13 @@ Calculation functions are kept in `src/lib/calculators/definitions.ts`, outside 
 5. Add remaining health, math and other tools with domain-reviewed formulas.
 6. Add Playwright flows, accessibility audits, performance budgets and full mobile QA.
 7. Add user features only if product requirements justify persistence/authentication.
+
+
+## SEO articles, calculator directory and sitemaps
+
+- All 16 currently implemented calculator detail pages include long-form guides: overview, method, formula, worked example, usage steps, interpretation tips, assumptions, limitations and FAQs.
+- Category directories are available at `/categories/financial`, `/categories/health-fitness`, `/categories/math`, and `/categories/other`.
+- The complete researched inventory is maintained in `src/lib/calculators/catalog.json` and displayed in the category directories and `/sitemap.html`.
+- Only working calculator pages are linked as available. Other inventory entries are clearly marked **Planned** rather than presented as working calculators.
+- Next.js generates the XML sitemap at `/sitemap.xml`; `robots.txt` references it. Set `NEXT_PUBLIC_SITE_URL` to the production origin before deployment.
+- The current inventory contains 204 entries based on the names present in the reference sitemap list (75 Financial, 31 Fitness & Health, 44 Math, 54 Other). The previous research summary incorrectly stated 45 Math / 205 total; this has been corrected to match the actual listed names.
