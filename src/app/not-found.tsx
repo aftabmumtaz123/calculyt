@@ -1,1 +1,17 @@
-import Link from "next/link";export default function NotFound(){return <main className="container-shell py-24 text-center"><p className="text-sm font-bold uppercase tracking-widest text-violet-600">404</p><h1 className="mt-3 text-4xl font-extrabold">Calculator not found</h1><p className="mt-3 text-muted">This calculator may not be available yet.</p><Link href="/" className="btn-primary mt-7 inline-block">Browse calculators</Link></main>}
+import Link from "next/link";
+export default function NotFound() {
+  return (
+    <main className="container-shell py-24 text-center">
+      <p className="text-sm font-bold uppercase tracking-widest text-violet-600">
+        404
+      </p>
+      <h1 className="mt-3 text-4xl font-extrabold">Calculator not found</h1>
+      <p className="mt-3 text-muted">
+        This calculator may not be available yet.
+      </p>
+      <Link href="/" className="btn-primary mt-7 inline-block">
+        Browse calculators
+      </Link>
+    </main>
+  );
+}

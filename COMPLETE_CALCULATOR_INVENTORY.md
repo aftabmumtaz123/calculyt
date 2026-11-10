@@ -10,93 +10,93 @@
 
 ## Inventory summary
 
-| Category | Calculator count |
-|---|---:|
-| Financial | 75 |
-| Fitness and Health | 31 |
-| Math | 44 |
-| Other | 54 |
-| **Total standalone calculators** | **204** |
+| Category                         | Calculator count |
+| -------------------------------- | ---------------: |
+| Financial                        |               75 |
+| Fitness and Health               |               31 |
+| Math                             |               44 |
+| Other                            |               54 |
+| **Total standalone calculators** |          **204** |
 
 Calculator.net's homepage describes the collection as approximately 200 calculators. The current sitemap lists 205 standalone calculators across the four categories above.
 
 ## A. Financial calculators (75)
 
-- [ ] Mortgage Calculator
-- [ ] Loan Calculator
-- [ ] Auto Loan Calculator
-- [ ] Interest Calculator
-- [ ] Payment Calculator
-- [ ] Retirement Calculator
-- [ ] Amortization Calculator
-- [ ] Investment Calculator
-- [ ] Currency Calculator
-- [ ] Inflation Calculator
-- [ ] Finance Calculator
-- [ ] Mortgage Payoff Calculator
-- [ ] Income Tax Calculator
-- [ ] Compound Interest Calculator
-- [ ] Salary Calculator
-- [ ] 401K Calculator
-- [ ] Interest Rate Calculator
-- [ ] Sales Tax Calculator
-- [ ] House Affordability Calculator
-- [ ] Savings Calculator
-- [ ] Rent Calculator
-- [ ] Marriage Tax Calculator
-- [ ] Estate Tax Calculator
-- [ ] Pension Calculator
-- [ ] Social Security Calculator
-- [ ] Annuity Calculator
-- [ ] Annuity Payout Calculator
-- [ ] Credit Card Calculator
-- [ ] Credit Cards Payoff Calculator
-- [ ] Debt Payoff Calculator
-- [ ] Debt Consolidation Calculator
-- [ ] Repayment Calculator
-- [ ] Student Loan Calculator
-- [ ] College Cost Calculator
-- [ ] Simple Interest Calculator
-- [ ] CD Calculator
-- [ ] Bond Calculator
-- [ ] Mutual Fund Calculator
-- [ ] Roth IRA Calculator
-- [ ] IRA Calculator
-- [ ] RMD Calculator
-- [ ] VAT Calculator
-- [ ] Cash Back or Low Interest Calculator
-- [ ] Auto Lease Calculator
-- [ ] Depreciation Calculator
-- [ ] Average Return Calculator
-- [ ] Margin Calculator
-- [ ] Discount Calculator
-- [ ] Business Loan Calculator
-- [ ] Debt-to-Income Ratio Calculator
-- [ ] Real Estate Calculator
-- [ ] Take-Home-Paycheck Calculator
-- [ ] Personal Loan Calculator
-- [ ] Boat Loan Calculator
-- [ ] Lease Calculator
-- [ ] Refinance Calculator
-- [ ] Budget Calculator
-- [ ] Rental Property Calculator
-- [ ] IRR Calculator
-- [ ] ROI Calculator
-- [ ] APR Calculator
-- [ ] FHA Loan Calculator
-- [ ] VA Mortgage Calculator
-- [ ] Home Equity Loan Calculator
-- [ ] HELOC Calculator
-- [ ] Down Payment Calculator
-- [ ] Rent vs. Buy Calculator
-- [ ] Payback Period Calculator
-- [ ] Present Value Calculator
-- [ ] Future Value Calculator
-- [ ] Commission Calculator
-- [ ] Mortgage Calculator UK
-- [ ] Canadian Mortgage Calculator
-- [ ] Mortgage Amortization Calculator
-- [ ] Percent Off Calculator
+- [x] Mortgage Calculator
+- [x] Loan Calculator
+- [x] Auto Loan Calculator
+- [x] Interest Calculator
+- [x] Payment Calculator
+- [x] Retirement Calculator
+- [x] Amortization Calculator
+- [x] Investment Calculator
+- [x] Currency Calculator
+- [x] Inflation Calculator
+- [x] Finance Calculator
+- [x] Mortgage Payoff Calculator
+- [x] Income Tax Calculator
+- [x] Compound Interest Calculator
+- [x] Salary Calculator
+- [x] 401K Calculator
+- [x] Interest Rate Calculator
+- [x] Sales Tax Calculator
+- [x] House Affordability Calculator
+- [x] Savings Calculator
+- [x] Rent Calculator
+- [x] Marriage Tax Calculator
+- [x] Estate Tax Calculator
+- [x] Pension Calculator
+- [x] Social Security Calculator
+- [x] Annuity Calculator
+- [x] Annuity Payout Calculator
+- [x] Credit Card Calculator
+- [x] Credit Cards Payoff Calculator
+- [x] Debt Payoff Calculator
+- [x] Debt Consolidation Calculator
+- [x] Repayment Calculator
+- [x] Student Loan Calculator
+- [x] College Cost Calculator
+- [x] Simple Interest Calculator
+- [x] CD Calculator
+- [x] Bond Calculator
+- [x] Mutual Fund Calculator
+- [x] Roth IRA Calculator
+- [x] IRA Calculator
+- [x] RMD Calculator
+- [x] VAT Calculator
+- [x] Cash Back or Low Interest Calculator
+- [x] Auto Lease Calculator
+- [x] Depreciation Calculator
+- [x] Average Return Calculator
+- [x] Margin Calculator
+- [x] Discount Calculator
+- [x] Business Loan Calculator
+- [x] Debt-to-Income Ratio Calculator
+- [x] Real Estate Calculator
+- [x] Take-Home-Paycheck Calculator
+- [x] Personal Loan Calculator
+- [x] Boat Loan Calculator
+- [x] Lease Calculator
+- [x] Refinance Calculator
+- [x] Budget Calculator
+- [x] Rental Property Calculator
+- [x] IRR Calculator
+- [x] ROI Calculator
+- [x] APR Calculator
+- [x] FHA Loan Calculator
+- [x] VA Mortgage Calculator
+- [x] Home Equity Loan Calculator
+- [x] HELOC Calculator
+- [x] Down Payment Calculator
+- [x] Rent vs. Buy Calculator
+- [x] Payback Period Calculator
+- [x] Present Value Calculator
+- [x] Future Value Calculator
+- [x] Commission Calculator
+- [x] Mortgage Calculator UK
+- [x] Canadian Mortgage Calculator
+- [x] Mortgage Amortization Calculator
+- [x] Percent Off Calculator
 
 ## B. Fitness and Health calculators (31)
 

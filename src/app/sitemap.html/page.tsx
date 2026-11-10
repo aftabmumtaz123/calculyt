@@ -1,6 +1,80 @@
 import Link from "next/link";
 import catalog from "@/lib/calculators/catalog.json";
-import { calculators,categories } from "@/lib/calculators/definitions";
+import { calculators, categories } from "@/lib/calculators/definitions";
 import { categorySlug } from "@/lib/calculators/catalog-utils";
-export const metadata={title:"HTML Sitemap",description:"Browse all Calculyt calculator categories and calculator pages."};
-export default function HtmlSitemap(){return <main className="container-shell py-10 md:py-14"><p className="text-xs font-bold uppercase tracking-[.16em] text-violet-600">Site navigation</p><h1 className="mt-2 text-4xl font-extrabold">Calculyt Sitemap</h1><p className="mt-4 max-w-2xl leading-7 text-muted">Browse the calculator directory by category. Available tools open their interactive calculator and detailed guide. Planned tools are listed for discovery but are not yet functional.</p><div className="mt-8 grid gap-6 md:grid-cols-2">{categories.map(category=><section key={category.name} className="card p-5"><h2 className="text-xl font-extrabold"><Link className="text-violet-700 hover:underline" href={`/categories/${categorySlug(category.name)}`}>{category.name}</Link></h2><ul className="mt-4 grid gap-2 sm:grid-cols-2">{catalog.filter(x=>x.category===category.name).map(item=>{const tool=calculators.find(c=>c.name===item.name);return <li key={item.slug} className="text-sm">{tool?<Link className="text-violet-700 hover:underline" href={`/calculators/${tool.slug}`}>{item.name}</Link>:<span className="text-muted">{item.name} <span className="text-[10px]">(planned)</span></span>}</li>})}</ul></section>)}</div><section className="mt-8 card p-5"><h2 className="font-bold">Other pages</h2><ul className="mt-3 flex flex-wrap gap-4 text-sm"><li><Link className="text-violet-700 hover:underline" href="/">Home</Link></li><li><Link className="text-violet-700 hover:underline" href="/sitemap.xml">XML sitemap</Link></li></ul></section></main>;}
+export const metadata = {
+  title: "HTML Sitemap",
+  description:
+    "Browse all Calculyt calculator categories and calculator pages.",
+};
+export default function HtmlSitemap() {
+  return (
+    <main className="container-shell py-10 md:py-14">
+      <p className="text-xs font-bold uppercase tracking-[.16em] text-violet-600">
+        Site navigation
+      </p>
+      <h1 className="mt-2 text-4xl font-extrabold">Calculyt Sitemap</h1>
+      <p className="mt-4 max-w-2xl leading-7 text-muted">
+        Browse the calculator directory by category. Available tools open their
+        interactive calculator and detailed guide. Planned tools are listed for
+        discovery but are not yet functional.
+      </p>
+      <div className="mt-8 grid gap-6 md:grid-cols-2">
+        {categories.map((category) => (
+          <section key={category.name} className="card p-5">
+            <h2 className="text-xl font-extrabold">
+              <Link
+                className="text-violet-700 hover:underline"
+                href={`/categories/${categorySlug(category.name)}`}
+              >
+                {category.name}
+              </Link>
+            </h2>
+            <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+              {catalog
+                .filter((x) => x.category === category.name)
+                .map((item) => {
+                  const tool = calculators.find((c) => c.name === item.name);
+                  return (
+                    <li key={item.slug} className="text-sm">
+                      {tool ? (
+                        <Link
+                          className="text-violet-700 hover:underline"
+                          href={`/calculators/${tool.slug}`}
+                        >
+                          {item.name}
+                        </Link>
+                      ) : (
+                        <span className="text-muted">
+                          {item.name}{" "}
+                          <span className="text-[10px]">(planned)</span>
+                        </span>
+                      )}
+                    </li>
+                  );
+                })}
+            </ul>
+          </section>
+        ))}
+      </div>
+      <section className="mt-8 card p-5">
+        <h2 className="font-bold">Other pages</h2>
+        <ul className="mt-3 flex flex-wrap gap-4 text-sm">
+          <li>
+            <Link className="text-violet-700 hover:underline" href="/">
+              Home
+            </Link>
+          </li>
+          <li>
+            <Link
+              className="text-violet-700 hover:underline"
+              href="/sitemap.xml"
+            >
+              XML sitemap
+            </Link>
+          </li>
+        </ul>
+      </section>
+    </main>
+  );
+}

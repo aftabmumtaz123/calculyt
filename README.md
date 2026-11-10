@@ -16,7 +16,7 @@ A modern Next.js App Router + TypeScript calculator platform foundation with a p
 
 ## Implemented calculators
 
-**Financial:** Compound Interest, Mortgage, Loan, Savings.
+**Financial:** 75 calculators registered with interactive calculation forms, calculation engines, and educational guide sections.
 
 **Health & Fitness:** BMI, BMR, Calorie, Ideal Weight.
 
@@ -24,7 +24,7 @@ A modern Next.js App Router + TypeScript calculator platform foundation with a p
 
 **Other:** Age, Date Difference, GPA (three-course weighted model), Tip, Fuel Cost, Length Converter.
 
-Total implemented in this starter: **16**.
+Total implemented in this release: **87** (75 Financial + 4 Health + 2 Math + 6 Other).
 
 The full reference inventory is included as `COMPLETE_CALCULATOR_INVENTORY.md`. The 204 entries in that research inventory are discovered tools, not implemented calculators. The remaining tools are intentionally not represented as working pages or fake calculations.
 
@@ -99,7 +99,6 @@ Calculation functions are kept in `src/lib/calculators/definitions.ts`, outside 
 5. Add remaining health, math and other tools with domain-reviewed formulas.
 6. Add Playwright flows, accessibility audits, performance budgets and full mobile QA.
 7. Add user features only if product requirements justify persistence/authentication.
-
 
 ## SEO articles, calculator directory and sitemaps
 
