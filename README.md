@@ -16,13 +16,13 @@ A modern Next.js App Router + TypeScript calculator platform with a responsive U
 
 ## Implemented calculator inventory
 
-| Category | Implemented | Catalog total |
-|---|---:|---:|
-| Financial | 75 | 75 |
-| Health & Fitness | 31 | 31 |
-| Math | 44 | 44 |
-| Other | 4 directory-linked (+ 2 legacy tools) | 54 |
-| **Total** | **156 registered (154 directory-linked)** | **204** |
+| Category         |                               Implemented | Catalog total |
+| ---------------- | ----------------------------------------: | ------------: |
+| Financial        |                                        75 |            75 |
+| Health & Fitness |                                        31 |            31 |
+| Math             |                                        44 |            44 |
+| Other            |     4 directory-linked (+ 2 legacy tools) |            54 |
+| **Total**        | **156 registered (154 directory-linked)** |       **204** |
 
 The project catalog contains 44 Math entries. An earlier research inventory document had listed 45; the inventory has now been reconciled to the actual catalog. The remaining 50 Other directory entries are still planned. Two existing legacy tools (Date Difference and Length Converter) remain accessible under their current slugs but do not yet match the catalog's Date Calculator and Conversion Calculator labels.
 

@@ -10,13 +10,13 @@
 
 ## Inventory summary
 
-| Category | Calculator count |
-|---|---:|
-| Financial | 75 |
-| Fitness and Health | 31 |
-| Math | 44 |
-| Other | 54 |
-| **Total standalone calculators** | **204** |
+| Category                         | Calculator count |
+| -------------------------------- | ---------------: |
+| Financial                        |               75 |
+| Fitness and Health               |               31 |
+| Math                             |               44 |
+| Other                            |               54 |
+| **Total standalone calculators** |          **204** |
 
 Calculator.net's homepage describes the collection as approximately 200 calculators. The current sitemap lists 205 standalone calculators across the four categories above.
 
