@@ -1,4 +1,1 @@
-{
-  "/categories/[category]/page": "app/categories/[category]/page.js",
-  "/calculators/[slug]/page": "app/calculators/[slug]/page.js"
-}
+{}
