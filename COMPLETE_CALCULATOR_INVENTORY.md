@@ -10,13 +10,13 @@
 
 ## Inventory summary
 
-| Category                         | Calculator count |
-| -------------------------------- | ---------------: |
-| Financial                        |               75 |
-| Fitness and Health               |               31 |
-| Math                             |               44 |
-| Other                            |               54 |
-| **Total standalone calculators** |          **204** |
+| Category | Calculator count |
+|---|---:|
+| Financial | 75 |
+| Fitness and Health | 31 |
+| Math | 44 |
+| Other | 54 |
+| **Total standalone calculators** | **204** |
 
 Calculator.net's homepage describes the collection as approximately 200 calculators. The current sitemap lists 205 standalone calculators across the four categories above.
 
@@ -100,84 +100,84 @@ Calculator.net's homepage describes the collection as approximately 200 calculat
 
 ## B. Fitness and Health calculators (31)
 
-- [ ] BMI Calculator
-- [ ] Calorie Calculator
-- [ ] Body Fat Calculator
-- [ ] BMR Calculator
-- [ ] Macro Calculator
-- [ ] Ideal Weight Calculator
-- [ ] Pregnancy Calculator
-- [ ] Pregnancy Weight Gain Calculator
-- [ ] Pregnancy Conception Calculator
-- [ ] Due Date Calculator
-- [ ] Pace Calculator
-- [ ] Army Body Fat Calculator
-- [ ] Carbohydrate Calculator
-- [ ] Lean Body Mass Calculator
-- [ ] Healthy Weight Calculator
-- [ ] Calories Burned Calculator
-- [ ] One Rep Max Calculator
-- [ ] Target Heart Rate Calculator
-- [ ] Protein Calculator
-- [ ] Fat Intake Calculator
-- [ ] TDEE Calculator
-- [ ] Ovulation Calculator
-- [ ] Conception Calculator
-- [ ] Period Calculator
-- [ ] GFR Calculator
-- [ ] Body Type Calculator
-- [ ] Body Surface Area Calculator
-- [ ] BAC Calculator
-- [ ] Anorexic BMI Calculator
-- [ ] Weight Watcher Points Calculator
-- [ ] Overweight Calculator
+- [x] BMI Calculator
+- [x] Calorie Calculator
+- [x] Body Fat Calculator
+- [x] BMR Calculator
+- [x] Macro Calculator
+- [x] Ideal Weight Calculator
+- [x] Pregnancy Calculator
+- [x] Pregnancy Weight Gain Calculator
+- [x] Pregnancy Conception Calculator
+- [x] Due Date Calculator
+- [x] Pace Calculator
+- [x] Army Body Fat Calculator
+- [x] Carbohydrate Calculator
+- [x] Lean Body Mass Calculator
+- [x] Healthy Weight Calculator
+- [x] Calories Burned Calculator
+- [x] One Rep Max Calculator
+- [x] Target Heart Rate Calculator
+- [x] Protein Calculator
+- [x] Fat Intake Calculator
+- [x] TDEE Calculator
+- [x] Ovulation Calculator
+- [x] Conception Calculator
+- [x] Period Calculator
+- [x] GFR Calculator
+- [x] Body Type Calculator
+- [x] Body Surface Area Calculator
+- [x] BAC Calculator
+- [x] Anorexic BMI Calculator
+- [x] Weight Watcher Points Calculator
+- [x] Overweight Calculator
 
-## C. Math calculators (45)
+## C. Math calculators (44)
 
-- [ ] Scientific Calculator
-- [ ] Fraction Calculator
-- [ ] Percentage Calculator
-- [ ] Triangle Calculator
-- [ ] Volume Calculator
-- [ ] Standard Deviation Calculator
-- [ ] Random Number Generator
-- [ ] Number Sequence Calculator
-- [ ] Percent Error Calculator
-- [ ] Exponent Calculator
-- [ ] Binary Calculator
-- [ ] Hex Calculator
-- [ ] Half-Life Calculator
-- [ ] Quadratic Formula Calculator
-- [ ] Slope Calculator
-- [ ] Log Calculator
-- [ ] Area Calculator
-- [ ] Sample Size Calculator
-- [ ] Probability Calculator
-- [ ] Statistics Calculator
-- [ ] Mean, Median, Mode, Range Calculator
-- [ ] Permutation and Combination Calculator
-- [ ] Z-score Calculator
-- [ ] Confidence Interval Calculator
-- [ ] Ratio Calculator
-- [ ] Distance Calculator
-- [ ] Circle Calculator
-- [ ] Surface Area Calculator
-- [ ] Pythagorean Theorem Calculator
-- [ ] Right Triangle Calculator
-- [ ] Root Calculator
-- [ ] Least Common Multiple Calculator
-- [ ] Greatest Common Factor Calculator
-- [ ] Factor Calculator
-- [ ] Rounding Calculator
-- [ ] Matrix Calculator
-- [ ] Scientific Notation Calculator
-- [ ] Big Number Calculator
-- [ ] Prime Factorization Calculator
-- [ ] Common Factor Calculator
-- [ ] Basic Calculator
-- [ ] Long Division Calculator
-- [ ] Average Calculator
-- [ ] P-value Calculator
+- [x] Scientific Calculator
+- [x] Fraction Calculator
+- [x] Percentage Calculator
+- [x] Triangle Calculator
+- [x] Volume Calculator
+- [x] Standard Deviation Calculator
+- [x] Random Number Generator
+- [x] Number Sequence Calculator
+- [x] Percent Error Calculator
+- [x] Exponent Calculator
+- [x] Binary Calculator
+- [x] Hex Calculator
+- [x] Half-Life Calculator
+- [x] Quadratic Formula Calculator
+- [x] Slope Calculator
+- [x] Log Calculator
+- [x] Area Calculator
+- [x] Sample Size Calculator
+- [x] Probability Calculator
+- [x] Statistics Calculator
+- [x] Mean, Median, Mode, Range Calculator
+- [x] Permutation and Combination Calculator
+- [x] Z-score Calculator
+- [x] Confidence Interval Calculator
+- [x] Ratio Calculator
+- [x] Distance Calculator
+- [x] Circle Calculator
+- [x] Surface Area Calculator
+- [x] Pythagorean Theorem Calculator
+- [x] Right Triangle Calculator
+- [x] Root Calculator
+- [x] Least Common Multiple Calculator
+- [x] Greatest Common Factor Calculator
+- [x] Factor Calculator
+- [x] Rounding Calculator
+- [x] Matrix Calculator
+- [x] Scientific Notation Calculator
+- [x] Big Number Calculator
+- [x] Prime Factorization Calculator
+- [x] Common Factor Calculator
+- [x] Basic Calculator
+- [x] Long Division Calculator
+- [x] Average Calculator
+- [x] P-value Calculator
 
 ## D. Other calculators (54)
 

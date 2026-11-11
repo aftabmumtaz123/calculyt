@@ -1,32 +1,34 @@
 # Calculyt — Calculator Platform
 
-A modern Next.js App Router + TypeScript calculator platform foundation with a premium, responsive UI and client-side calculation engines.
+A modern Next.js App Router + TypeScript calculator platform with a responsive UI, client-side calculation engines, educational guides and SEO-friendly calculator pages.
 
 ## Included
 
-- Next.js 15, React 19, TypeScript strict mode, Tailwind CSS.
-- Premium responsive homepage and calculator detail pages.
-- Calculator registry powering navigation, category groups, static params and sitemap.
-- Input-driven calculations with validation and reset.
+- Next.js 15, React 19, TypeScript strict mode and Tailwind CSS.
+- Responsive homepage, category directories and calculator detail pages.
+- Central calculator registry powering navigation, category groups, static params and sitemap.
+- Typed input schemas, validation, reset and copy-result actions.
 - Recharts visualizations for suitable calculators.
-- Copy-result action.
-- Dynamic page metadata, sitemap.xml and robots.txt.
+- Educational guide sections with methodology, formulas, examples, usage guidance, assumptions and FAQs.
+- Dynamic metadata, structured data, sitemap.xml, HTML sitemap and robots.txt.
 - Vitest calculation tests.
 - No required external calculation API or database.
 
-## Implemented calculators
+## Implemented calculator inventory
 
-**Financial:** 75 calculators registered with interactive calculation forms, calculation engines, and educational guide sections.
+| Category | Implemented | Catalog total |
+|---|---:|---:|
+| Financial | 75 | 75 |
+| Health & Fitness | 31 | 31 |
+| Math | 44 | 44 |
+| Other | 4 directory-linked (+ 2 legacy tools) | 54 |
+| **Total** | **156 registered (154 directory-linked)** | **204** |
 
-**Health & Fitness:** BMI, BMR, Calorie, Ideal Weight.
+The project catalog contains 44 Math entries. An earlier research inventory document had listed 45; the inventory has now been reconciled to the actual catalog. The remaining 50 Other directory entries are still planned. Two existing legacy tools (Date Difference and Length Converter) remain accessible under their current slugs but do not yet match the catalog's Date Calculator and Conversion Calculator labels.
 
-**Math:** Percentage, Random Number Generator.
+## Health calculator safety
 
-**Other:** Age, Date Difference, GPA (three-course weighted model), Tip, Fuel Cost, Length Converter.
-
-Total implemented in this release: **87** (75 Financial + 4 Health + 2 Math + 6 Other).
-
-The full reference inventory is included as `COMPLETE_CALCULATOR_INVENTORY.md`. The 204 entries in that research inventory are discovered tools, not implemented calculators. The remaining tools are intentionally not represented as working pages or fake calculations.
+Health outputs are educational estimates, not diagnoses or individualized medical advice. Pregnancy, ovulation, period, body-composition, kidney-function and BAC estimates include explicit limitations. BAC must never be used to decide whether it is safe to drive. The Weight Watcher Points page uses a transparent custom illustrative calculation and does not reproduce the proprietary WeightWatchers formula.
 
 ## Requirements
 
@@ -61,50 +63,24 @@ Deploy as a standard Next.js application on Vercel or another Node-compatible ho
 src/
   app/
     calculators/[slug]/page.tsx
-    globals.css
-    layout.tsx
-    page.tsx
-    robots.ts
+    categories/[category]/page.tsx
     sitemap.ts
+    sitemap.html/page.tsx
+    robots.ts
   components/
     CalculatorClient.tsx
+    CalculatorArticle.tsx
     ResultChart.tsx
     SiteHeader.tsx
   lib/
     calculators/
       definitions.ts
+      financial-extras.ts
+      health-extras.ts
+      math-extras.ts
+      articles.ts
       format.ts
       types.ts
 ```
 
-Calculation functions are kept in `src/lib/calculators/definitions.ts`, outside React components. Each definition owns its typed metadata, input schema and calculation function. For a larger production rollout, split definitions into category modules and add a dedicated formula documentation/test file per calculator.
-
-## Accuracy and limitations
-
-- Mortgage and loan calculations assume fixed rates and regular monthly payments; taxes, insurance, lender fees and other charges are excluded.
-- Compound interest and savings use a constant rate and periodic deposits.
-- BMI/BMR/calorie/ideal-weight results are estimates and are not medical advice.
-- GPA currently supports three courses with a common grade-point scale.
-- The random generator uses `Math.random()` and is not cryptographically secure.
-- Fuel and unit conversions depend on the units shown in the form.
-- Date calculations use calendar dates in the browser's local timezone.
-- This is a foundation release, not completion of all 205 Calculator.net tools. Do not claim full parity until every inventory item has its own researched formula, implementation, tests, explanation and verification.
-
-## Next implementation milestones
-
-1. Research formula and input specifications for every remaining inventory item.
-2. Split calculator definitions by category.
-3. Expand GPA to a dynamic course list and add richer date/time utilities.
-4. Add remaining financial tools and amortization schedules.
-5. Add remaining health, math and other tools with domain-reviewed formulas.
-6. Add Playwright flows, accessibility audits, performance budgets and full mobile QA.
-7. Add user features only if product requirements justify persistence/authentication.
-
-## SEO articles, calculator directory and sitemaps
-
-- All 16 currently implemented calculator detail pages include long-form guides: overview, method, formula, worked example, usage steps, interpretation tips, assumptions, limitations and FAQs.
-- Category directories are available at `/categories/financial`, `/categories/health-fitness`, `/categories/math`, and `/categories/other`.
-- The complete researched inventory is maintained in `src/lib/calculators/catalog.json` and displayed in the category directories and `/sitemap.html`.
-- Only working calculator pages are linked as available. Other inventory entries are clearly marked **Planned** rather than presented as working calculators.
-- Next.js generates the XML sitemap at `/sitemap.xml`; `robots.txt` references it. Set `NEXT_PUBLIC_SITE_URL` to the production origin before deployment.
-- The current inventory contains 204 entries based on the names present in the reference sitemap list (75 Financial, 31 Fitness & Health, 44 Math, 54 Other). The previous research summary incorrectly stated 45 Math / 205 total; this has been corrected to match the actual listed names.
+Calculation functions are kept in typed category modules and registered through `definitions.ts`. Each definition owns its metadata, input schema and calculation function.

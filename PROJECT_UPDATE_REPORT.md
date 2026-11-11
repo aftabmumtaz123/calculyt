@@ -1,18 +1,28 @@
-# Calculyt Financial Category Expansion
+# Calculyt Health & Fitness and Math Expansion
 
 ## Delivered
+- Registered all 31 Health & Fitness calculator entries: 27 new tools plus the 4 existing BMI, BMR, Calorie and Ideal Weight calculators.
+- Registered all 44 Math calculator entries: 42 new tools plus the 2 existing Percentage and Random Number tools.
+- Added calculation engines, configurable inputs, result metrics and charts where useful.
+- Added safety and limitation notes for health-sensitive estimates including pregnancy, eGFR, BAC, body composition and weight-related tools.
+- The Weight Watcher Points page uses a clearly disclosed custom illustrative points estimate, not a proprietary WeightWatchers formula.
+- The directory links available tools to their calculation pages through the central registry.
+- Updated the implementation inventory and project documentation.
 
-- Registered all 75 Financial calculator entries from the project's catalog.
-- Added 71 additional Financial calculator definitions and calculation engines; the four previously implemented Financial calculators remain in place.
-- Added calculator input forms, result summaries, supporting metrics and charts where useful.
-- Added a shared educational article fallback so every registered calculator detail page has explanatory content, usage guidance, limitations and FAQs.
-- Updated the Financial section of the inventory to completed.
-- Updated the README and project totals.
+## Category totals
+- Financial: 75 / 75
+- Health & Fitness: 31 / 31
+- Math: 44 / 44 (the catalog contains 44 Math entries; the earlier inventory count of 45 was corrected)
+- Other: 4 of 54 catalog entries currently match an existing tool by name; two additional legacy tools (Date Difference and Length Converter) remain accessible under their existing slugs. 50 catalog entries remain planned.
 
-## Important calculation scope
+## Important limitations
+Health outputs are educational estimates and are not diagnoses or individualized medical advice. Pregnancy, ovulation, period, body-composition, kidney-function and BAC estimates have explicit limitations. BAC must never be used to decide whether it is safe to drive. The Weight Watcher Points tool does not reproduce the proprietary branded formula.
 
-Some tools use simplified educational models (for example, effective-rate tax estimates, user-entered currency exchange rates, simplified lease/annuity models, and high-level rent-versus-buy comparisons). They are not jurisdiction-specific tax returns, lender quotes, investment advice or official benefit determinations. Their pages disclose these assumptions.
+Math models include standard approximations where stated (for example, z-based confidence intervals and p-values). Some tools intentionally use bounded input ranges to avoid excessive computation.
 
 ## Verification
+The package contains source code and test updates. Run `npm install`, `npm run typecheck`, `npm test`, and `npm run build` in the target environment before deployment. A full Next.js production build was not run during packaging.
 
-The new financial calculation module passes an isolated strict TypeScript check. The full app typecheck/build could not be completed here because dependencies were not installed (the install attempt timed out). The ZIP archive is integrity-checked. Run `npm install`, `npm run typecheck`, `npm test`, and `npm run build` locally before deployment. A production build has not been executed in this packaging step.
+
+## Directory matching note
+The Other category contains 54 catalog entries. Four existing tools match those entries by display name. The legacy Date Difference and Length Converter tools are still registered, but their display names differ from the catalog's Date Calculator and Conversion Calculator labels; they are therefore not counted as directory-linked entries in this release.

@@ -1,5 +1,2 @@
+node_modules\n.next\nout\ndist\n.env*\n!.env.example\ncoverage\n
 node_modules
-.next
-out
-dist
-.env
