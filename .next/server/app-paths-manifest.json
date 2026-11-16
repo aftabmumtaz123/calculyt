@@ -1,1 +1,9 @@
-{}
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/sitemap.xml/route": "app/sitemap.xml/route.js",
+  "/robots.txt/route": "app/robots.txt/route.js",
+  "/page": "app/page.js",
+  "/calculators/[slug]/page": "app/calculators/[slug]/page.js",
+  "/categories/[category]/page": "app/categories/[category]/page.js",
+  "/sitemap.html/page": "app/sitemap.html/page.js"
+}
