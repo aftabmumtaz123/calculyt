@@ -1,0 +1,9 @@
+{
+  "/robots.txt/route": "/robots.txt",
+  "/sitemap.xml/route": "/sitemap.xml",
+  "/_not-found/page": "/_not-found",
+  "/page": "/",
+  "/calculators/[slug]/page": "/calculators/[slug]",
+  "/categories/[category]/page": "/categories/[category]",
+  "/sitemap.html/page": "/sitemap.html"
+}

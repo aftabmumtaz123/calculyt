@@ -4,7 +4,7 @@
 type AppRoutes = "/" | "/calculators/[slug]" | "/categories/[category]" | "/sitemap.html"
 type PageRoutes = never
 type LayoutRoutes = "/"
-type RedirectRoutes = never
+type RedirectRoutes = "/calculators/unit-conversion"
 type RewriteRoutes = never
 type Routes = AppRoutes | PageRoutes | LayoutRoutes | RedirectRoutes | RewriteRoutes
 
@@ -12,6 +12,7 @@ type Routes = AppRoutes | PageRoutes | LayoutRoutes | RedirectRoutes | RewriteRo
 interface ParamMap {
   "/": {}
   "/calculators/[slug]": { "slug": string; }
+  "/calculators/unit-conversion": {}
   "/categories/[category]": { "category": string; }
   "/sitemap.html": {}
 }
