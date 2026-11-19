@@ -88,3 +88,7 @@ Calculation functions are kept in typed category modules and registered through 
 ## QA remediation
 
 See `CALCULYT_QA_FIX_REPORT.md` for the code changes made against the 15-issue Professional QA Bug Report. After installing dependencies, run `npm run typecheck`, `npm test`, and `npm run build`. Re-test mobile widths (320, 375, 390, 430px), response headers, canonical URLs, redirect behavior, keyboard navigation, and contrast on the deployed environment before closing the QA tickets.
+
+
+## Latest UI fix — calculator search dialog
+The search dialog now renders in a document-level portal so the sticky header and its backdrop blur cannot trap the overlay beneath homepage content. The dialog is viewport-bounded and its results list scrolls independently. See `CALCULYT_SEARCH_MODAL_LAYOUT_FIX.md`.
