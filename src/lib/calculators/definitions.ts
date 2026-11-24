@@ -27,6 +27,18 @@ const defs:CalculatorDefinition[]=[
 ...mathExtras
 ];
 export const calculators=defs;
-export const getCalculator=(slug:string)=>defs.find(d=>d.slug===slug)??(slug==="unit-conversion"?defs.find(d=>d.slug==="length-converter"):undefined);
+export const calculatorAliases:Record<string,string>={
+ "unit-conversion":"length-converter",
+ "loan-calculator":"loan",
+ "generic-loan":"loan",
+ "generic-loan-calculator":"loan",
+ "auto-loan-calculator":"auto-loan",
+ "mortgage-calculator":"mortgage",
+ "personal-loan-calculator":"personal-loan"
+};
+export const getCalculator=(slug:string)=>{
+ const canonical=calculatorAliases[slug]??slug;
+ return defs.find(d=>d.slug===canonical);
+};
 export const categories=[{name:"Financial",description:"Plan borrowing, saving and long-term growth.",icon:"Wallet"},{name:"Health & Fitness",description:"Understand everyday health and fitness estimates.",icon:"Activity"},{name:"Math",description:"Solve common numerical problems with clarity.",icon:"Sigma"},{name:"Other",description:"Date, education, travel and practical everyday tools.",icon:"Grid3X3"}];
 export function calculate(slug:string,values:Record<string,string>):CalculationResult{const def=getCalculator(slug);if(!def)throw new Error("Calculator not found.");for(const field of def.fields){if(!values[field.name]&&values[field.name]!=="0")throw new Error(`${field.label} is required.`);if(field.type==="number"){const n=Number(values[field.name]);if(!Number.isFinite(n))throw new Error(`${field.label} must be a valid number.`);if(field.min!==undefined&&n<field.min)throw new Error(`${field.label} must be at least ${field.min}.`);if(field.max!==undefined&&n>field.max)throw new Error(`${field.label} must be no more than ${field.max}.`);}}return def.calculate(values);}

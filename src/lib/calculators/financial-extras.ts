@@ -18,7 +18,8 @@ const baseFields:Record<string,CalculatorField[]> = {
   "rate-solve":[field("principal","Starting amount","10000","USD",0,.01),field("future","Ending amount","15000","USD",0,.01),field("years","Time period","5","years",.01,.1)],
   "affordability":[field("income","Gross monthly household income","8000","USD",0,.01),field("debts","Other monthly debt payments","500","USD",0,.01),field("rate","Mortgage annual rate","6.5","%",0,.01),field("years","Mortgage term","30","years",1,1),field("down","Down payment available","60000","USD",0,.01)],
   "rent":[field("monthly","Monthly rent","1500","USD",0,.01),field("utilities","Monthly utilities and fees","200","USD",0,.01),field("income","Monthly take-home income","5000","USD",0,.01)],
-  "annuity":[field("principal","Starting principal","250000","USD",0,.01),field("rate","Annual return / discount rate","5","%",0,.01),field("years","Years","20","years",1,1)],
+  "annuity":[field("principal","Starting principal","250000","USD",0,.01),field("contribution","Monthly contribution","500","USD",0,.01),field("rate","Annual return","5","%",0,.01),field("years","Years","20","years",1,1)],
+  "benefit-stream":[field("benefit","Starting monthly benefit","2000","USD",.01,.01),field("years","Expected years of benefits","20","years",1,1),field("cola","Annual benefit increase","2","%",-99,.01),field("discount","Annual discount rate","4","%",-99,.01)],
   "annuity-payout":[field("principal","Annuity value","250000","USD",0,.01),field("rate","Annual rate","4","%",0,.01),field("years","Payout period","20","years",1,1)],
   "credit-card":[field("balance","Card balance","5000","USD",0,.01),field("apr","Annual percentage rate","22","%",0,.01),field("payment","Monthly payment","200","USD",.01,.01)],
   "debt-payoff":[field("balance","Total debt balance","12000","USD",0,.01),field("rate","Average annual interest rate","18","%",0,.01),field("payment","Monthly payment","500","USD",.01,.01)],
@@ -38,9 +39,10 @@ const baseFields:Record<string,CalculatorField[]> = {
   "refinance":[field("balance","Current mortgage balance","250000","USD",0,.01),field("oldrate","Current annual rate","7","%",0,.01),field("newrate","New annual rate","5.5","%",0,.01),field("years","Remaining term","25","years",1,1),field("costs","Refinance closing costs","5000","USD",0,.01)],
   "budget":[field("income","Monthly after-tax income","5000","USD",0,.01),field("housing","Housing costs","1500","USD",0,.01),field("needs","Other essential expenses","1000","USD",0,.01),field("wants","Discretionary spending","800","USD",0,.01),field("savings","Savings and debt goals","700","USD",0,.01)],
   "roi":[field("investment","Initial investment","10000","USD",.01,.01),field("value","Final value / proceeds","15000","USD",0,.01),field("costs","Additional costs","500","USD",0,.01)],
+  "irr":[field("investment","Initial investment","10000","USD",.01,.01),field("value","Final value / terminal proceeds","15000","USD",0,.01),field("costs","Additional terminal costs","500","USD",0,.01),field("cashFlow","Annual net cash flow","0","USD",0,.01),field("years","Holding period","5","years",1,1)],
   "apr":[field("principal","Loan principal","10000","USD",.01,.01),field("fees","Upfront fees","300","USD",0,.01),field("rate","Nominal annual interest rate","8","%",0,.01),field("years","Term","3","years",.1,.1)],
   "down-payment":[field("price","Purchase price","300000","USD",.01,.01),field("down","Down payment percentage","20","%",0,.01)],
-  "rent-vs-buy":[field("price","Home purchase price","300000","USD",0,.01),field("rent","Monthly rent","1800","USD",0,.01),field("rate","Mortgage rate","6","%",0,.01),field("years","Comparison years","7","years",1,1),field("down","Down payment","60000","USD",0,.01)],
+  "rent-vs-buy":[field("price","Home purchase price","300000","USD",0,.01),field("rent","Monthly rent","1800","USD",0,.01),field("rate","Mortgage rate","6","%",0,.01),field("years","Comparison period","7","years",1,1),field("mortgageYears","Mortgage amortization term","30","years",1,1),field("down","Down payment","60000","USD",0,.01)],
   "payback":[field("investment","Initial investment","25000","USD",.01,.01),field("annual","Annual net cash flow","7500","USD",.01,.01)],
   "present-value":[field("future","Future amount","20000","USD",0,.01),field("rate","Annual discount rate","5","%",-99,.01),field("years","Years","5","years",0,.1)],
   "future-value":[field("present","Present amount","10000","USD",0,.01),field("rate","Annual growth rate","5","%",-99,.01),field("years","Years","10","years",0,.1)],
@@ -58,14 +60,36 @@ function calc(kind:string,v:Record<string,string>):CalculationResult {
  case "retirement": case "investment": {const b=n(kind==="retirement"?"balance":"initial"),c=n("contribution"),r=n("return")/1200,m=Math.round(n("years")*12);let x=b,con=b,chart=[];for(let i=1;i<=m;i++){x=x*(1+r)+c;con+=c;if(i%12===0)chart.push({label:`Year ${i/12}`,value:x});}return result("Projected account value",money(x),"Projection assumes a steady monthly contribution and constant return.",[{label:"Starting amount",value:money(b)},{label:"Total contributed",value:money(con)},{label:"Estimated growth",value:money(x-con)}],chart);}
  case "currency": {const a=n("amount"),r=n("rate"),out=a*r;return result("Converted amount",fmt(out,4),"Uses the exchange rate entered by you.",[{label:"Source amount",value:fmt(a)},{label:"Exchange rate",value:fmt(r,6)}]);}
  case "inflation": {const a=n("amount"),r=n("inflation")/100,y=n("years"),future=a*Math.pow(1+r,y);return result("Equivalent future cost",money(future),`Estimated cost after ${fmt(y,1)} years of inflation.`,[{label:"Current amount",value:money(a)},{label:"Increase",value:money(future-a)},{label:"Purchasing power of current amount",value:money(a/Math.pow(1+r,y))}],[{label:"Today",value:a},{label:"Future",value:future}]);}
- case "payoff": case "credit-card": case "debt-payoff": {const b=n("balance"),r=n(kind==="credit-card"?"apr":"rate")/1200,pay=n(kind==="payoff"?"payment":"payment")+n("extra");if(r>0&&pay<=b*r)throw new Error("Payment must be greater than the first month's interest.");const months=r===0?Math.ceil(b/pay):Math.ceil(-Math.log(1-r*b/pay)/Math.log(1+r));const total= r===0?b:pay*(1-Math.pow(1+r,-months))/r;return result("Estimated payoff time",`${months} months`,"Assumes the payment remains constant and no new charges are added.",[{label:"Monthly payment",value:money(pay)},{label:"Estimated total paid",value:money(total)},{label:"Estimated interest",value:money(Math.max(0,total-b))}]);}
+ case "payoff": case "credit-card": case "debt-payoff": {
+  let balance=n("balance");const rate=n(kind==="credit-card"?"apr":"rate")/1200,payment=n("payment")+(kind==="payoff"?n("extra"):0);
+  if(balance===0)return result("Estimated payoff time","0 months","There is no remaining balance to repay.",[{label:"Total paid",value:money(0)},{label:"Interest",value:money(0)}]);
+  if(rate>0&&payment<=balance*rate)throw new Error("Monthly payment must be greater than the first month's interest.");
+  let totalPaid=0,totalInterest=0,months=0,lastPayment=0;
+  while(balance>0.005&&months<1200){const interest=balance*rate,due=balance+interest,paid=Math.min(payment,due);if(paid<=interest&&balance>0)throw new Error("Payment does not reduce the balance.");lastPayment=paid;totalInterest+=interest;totalPaid+=paid;balance=Math.max(0,due-paid);months++;}
+  if(balance>0.005)throw new Error("The balance could not be paid off within 100 years at this payment amount.");
+  return result("Estimated payoff time",`${months} months`,"Month-by-month amortization accrues interest on the opening balance and adjusts the final payment. Assumes no new charges, fees or rate changes.",[{label:"Regular monthly payment",value:money(payment)},{label:"Final payment",value:money(lastPayment)},{label:"Total paid",value:money(totalPaid)},{label:"Total interest",value:money(totalInterest)}]);
+ }
  case "tax": {const inc=n("income"),tax=inc*n("rate")/100;return result("Estimated tax",money(tax),"Uses a single effective tax rate entered by you, not statutory tax brackets.",[{label:"Gross taxable income",value:money(inc)},{label:"Effective rate",value:`${fmt(n("rate"))}%`},{label:"After-tax amount",value:money(inc-tax)}],[{label:"Estimated tax",value:tax},{label:"After-tax",value:inc-tax}],"Tax systems depend on jurisdiction, filing status, deductions, credits and tax year. This simplified effective-rate estimate is not a tax return.");}
  case "salary": {const gross=n("gross"),net=gross*(1-n("tax")/100),annual=net*n("periods");return result("Estimated take-home pay",money(net),"Net pay per entered pay period after the assumed deduction rate.",[{label:"Annual gross pay",value:money(gross*n("periods"))},{label:"Annual estimated net pay",value:money(annual)},{label:"Estimated deductions",value:money((gross-net)*n("periods"))}]);}
  case "tax-percent": {const a=n("price"),t=a*n("rate")/100;return result("Tax amount",money(t),"A flat percentage applied to the taxable amount.",[{label:"Pre-tax amount",value:money(a)},{label:"Tax rate",value:`${fmt(n("rate"))}%`},{label:"Total including tax",value:money(a+t)}],[{label:"Amount",value:a},{label:"Tax",value:t}]);}
  case "rate-solve": {const p=n("principal"),f=n("future"),y=n("years"),r=(Math.pow(f/p,1/y)-1)*100;return result("Implied annual growth rate",`${fmt(r)}%`,"Annualized compound growth rate implied by the starting and ending amounts.",[{label:"Starting amount",value:money(p)},{label:"Ending amount",value:money(f)},{label:"Period",value:`${fmt(y)} years`}]);}
- case "affordability": {const income=n("income"),debts=n("debts"),r=n("rate")/1200,months=n("years")*12,maxPay=Math.max(0,income*.28),loan=maxPay*(r===0?months:(1-Math.pow(1+r,-months))/r),house=loan+n("down");return result("Illustrative home price range",money(house),"Uses a 28% gross-income housing payment guideline before lender-specific underwriting.",[{label:"Estimated monthly housing budget",value:money(maxPay)},{label:"Estimated loan amount",value:money(loan)},{label:"Other monthly debts",value:money(debts)}]);}
+ case "affordability": {
+  const income=n("income"),debts=n("debts"),r=n("rate")/1200,months=Math.max(1,Math.round(n("years")*12)),frontEndLimit=income*.28,backEndLimit=Math.max(0,income*.36-debts),maxPay=Math.min(frontEndLimit,backEndLimit);
+  const loan=maxPay*(r===0?months:(1-Math.pow(1+r,-months))/r),house=loan+n("down");
+  return result("Illustrative home price range",money(house),"Uses illustrative 28% housing and 36% total-debt-to-income limits. Existing monthly debt reduces the amount available for housing. Taxes, insurance, HOA fees and lender-specific underwriting are not modeled.",[{label:"28% housing payment limit",value:money(frontEndLimit)},{label:"Payment available after 36% total-debt limit",value:money(backEndLimit)},{label:"Maximum modeled housing payment",value:money(maxPay)},{label:"Other monthly debts",value:money(debts)},{label:"Estimated loan amount",value:money(loan)},{label:"Down payment",value:money(n("down"))}]);
+ }
  case "rent": {const cost=n("monthly")+n("utilities"),income=n("income");return result("Monthly housing cost",money(cost),"Rent plus recurring utilities and fees.",[{label:"Share of take-home income",value:`${fmt(income?cost/income*100:0)}%`},{label:"Annual housing cost",value:money(cost*12)},{label:"Remaining monthly income",value:money(income-cost)}]);}
- case "annuity": case "annuity-payout": {const p=n("principal"),r=n("rate")/1200,m=n("years")*12,monthly=kind==="annuity-payout"?pmt(p,r,m):p*Math.pow(1+r,m);return result(kind==="annuity-payout"?"Estimated monthly payout":"Future annuity value",money(monthly),kind==="annuity-payout"?"Level monthly payout over the selected term.":"Illustrative accumulated value with monthly compounding.",[{label:"Starting value",value:money(p)},{label:"Term",value:`${fmt(n("years"))} years`},{label:"Total scheduled payouts",value:money(kind==="annuity-payout"?monthly*m:monthly)}]);}
+ case "annuity": case "annuity-payout": {
+  const principal=n("principal"),rate=n("rate")/1200,months=Math.max(1,Math.round(n("years")*12));
+  if(kind==="annuity-payout"){const monthly=pmt(principal,rate,months);return result("Estimated monthly payout",money(monthly),"Level end-of-month payments that amortize the annuity value over the selected payout term.",[{label:"Starting value",value:money(principal)},{label:"Payout period",value:`${fmt(n("years"))} years`},{label:"Total scheduled payouts",value:money(monthly*months)},{label:"Interest / return component",value:money(monthly*months-principal)}]);}
+  const contribution=n("contribution");let balance=principal,contributions=principal;for(let i=0;i<months;i++){balance=balance*(1+rate)+contribution;contributions+=contribution;}
+  return result("Future annuity value",money(balance),"Future value of the starting principal plus regular end-of-month contributions, compounded monthly.",[{label:"Starting principal",value:money(principal)},{label:"Total contributions",value:money(contributions)},{label:"Estimated growth",value:money(balance-contributions)},{label:"Term",value:`${fmt(n("years"))} years`}]);
+ }
+ case "benefit-stream": {
+  const benefit=n("benefit"),years=Math.max(1,Math.round(n("years"))),cola=n("cola")/100,discount=n("discount")/100;let presentValue=0,totalNominal=0;
+  for(let month=1;month<=years*12;month++){const year=Math.floor((month-1)/12),payment=benefit*Math.pow(1+cola,year);presentValue+=payment/Math.pow(1+discount,month/12);totalNominal+=payment;}
+  return result("Estimated present value of benefits",money(presentValue),"Discounted value of a monthly benefit stream using the entered annual cost-of-living adjustment and discount rate. This is an estimate, not an official pension or Social Security benefit determination.",[{label:"Starting monthly benefit",value:money(benefit)},{label:"Total undiscounted benefits",value:money(totalNominal)},{label:"Expected duration",value:`${years} years`},{label:"Annual COLA assumption",value:`${fmt(n("cola"))}%`},{label:"Annual discount rate",value:`${fmt(n("discount"))}%`}]);
+ }
  case "college": {let total=0;for(let i=0;i<n("duration");i++)total+=n("annual")*Math.pow(1+n("inflation")/100,n("years")+i);return result("Estimated total college cost",money(total),"Projects annual tuition and cost growth over the study period.",[{label:"First-year estimated cost",value:money(n("annual")*Math.pow(1+n("inflation")/100,n("years")))},{label:"Study duration",value:`${fmt(n("duration"),0)} years`},{label:"Total projected cost",value:money(total)}]);}
  case "compound": {const p=n("principal"),r=n("rate")/100,periods=n("periods"),y=n("years"),fv=p*Math.pow(1+r/periods,periods*y);return result("Maturity value",money(fv),"Compound growth on a single deposit.",[{label:"Principal",value:money(p)},{label:"Interest earned",value:money(fv-p)},{label:"Effective annual rate",value:`${fmt((Math.pow(1+r/periods,periods)-1)*100)}%`}],[{label:"Principal",value:p},{label:"Interest",value:fv-p}]);}
  case "bond": {const face=n("face"),coupon=face*n("coupon")/100,price=n("market");return result("Current bond yield",`${fmt(coupon/price*100)}%`,"Annual coupon divided by current market price; not yield to maturity.",[{label:"Annual coupon",value:money(coupon)},{label:"Market price",value:money(price)},{label:"Par value",value:money(face)}]);}
@@ -77,13 +101,44 @@ function calc(kind:string,v:Record<string,string>):CalculationResult {
  case "margin": {const c=n("cost"),p=n("price"),profit=p-c;return result("Gross profit margin",`${fmt(profit/p*100)}%`,"Profit as a percentage of selling price.",[{label:"Gross profit",value:money(profit)},{label:"Markup on cost",value:`${fmt(profit/c*100)}%`},{label:"Selling price",value:money(p)}]);}
  case "discount": {const p=n("price"),d=p*n("discount")/100;return result("Price after discount",money(p-d),"Original price less the entered percentage discount.",[{label:"You save",value:money(d)},{label:"Discount rate",value:`${fmt(n("discount"))}%`},{label:"Original price",value:money(p)}],[{label:"Discounted price",value:p-d},{label:"Savings",value:d}]);}
  case "dti": {const ratio=n("debts")/n("income")*100;return result("Debt-to-income ratio",`${fmt(ratio)}%`,"Monthly debt payments divided by gross monthly income.",[{label:"Monthly debts",value:money(n("debts"))},{label:"Gross monthly income",value:money(n("income"))},{label:"Income after listed debts",value:money(n("income")-n("debts"))}]);}
- case "real-estate": case "rental-property": {const price=n("price"),rent=n("rent"),expenses=n("expenses"),annual=rent*12-expenses;return result("Estimated annual net operating income",money(annual),"Simple property income estimate before financing, taxes and capital expenditures.",[{label:"Gross annual rent",value:money(rent*12)},{label:"Operating expenses",value:money(expenses)},{label:"Gross yield",value:`${fmt(price?rent*12/price*100:0)}%`}]);}
+ case "real-estate": case "rental-property": {
+  const price=n("price"),rent=n("rent"),monthlyExpenses=kind==="rental-property"?n("expenses"):0;
+  const annualExpenses=kind==="real-estate"?n("expenses"):monthlyExpenses*12,annual=rent*12-annualExpenses;
+  return result("Estimated annual net operating income",money(annual),"Annual NOI equals annual rental income less annual operating expenses. Rental Property Calculator expenses are entered monthly and annualized; financing costs and income taxes are excluded.",[{label:"Gross annual rent",value:money(rent*12)},{label:"Annual operating expenses",value:money(annualExpenses)},{label:"Monthly operating expenses",value:money(annualExpenses/12)},{label:"Gross yield",value:`${fmt(price?rent*12/price*100:0)}%`},{label:"NOI yield / cap rate",value:`${fmt(price?annual/price*100:0)}%`}]);
+ }
  case "refinance": {const p=n("balance"),old=n("oldrate")/1200,nr=n("newrate")/1200,m=n("years")*12,oldPay=pmt(p,old,m),newPay=pmt(p,nr,m),saving=(oldPay-newPay)*m-n("costs");return result("Estimated monthly payment after refinance",money(newPay),"Compares new payment with the current rate over the same remaining term.",[{label:"Current estimated payment",value:money(oldPay)},{label:"Monthly payment difference",value:money(oldPay-newPay)},{label:"Net term savings after costs",value:money(saving)}]);}
  case "budget": {const income=n("income"),out=n("housing")+n("needs")+n("wants")+n("savings");return result("Monthly unallocated balance",money(income-out),"Compares entered monthly income with the expense and goal categories.",[{label:"Total planned allocations",value:money(out)},{label:"Allocation percentage",value:`${fmt(income?out/income*100:0)}%`},{label:"Monthly income",value:money(income)}],[{label:"Housing",value:n("housing")},{label:"Essentials",value:n("needs")},{label:"Wants",value:n("wants")},{label:"Savings / debt",value:n("savings")}]);}
- case "roi": {const inv=n("investment"),gain=n("value")-inv-n("costs"),roi=gain/inv*100;return result("Return on investment",`${fmt(roi)}%`,"Net gain divided by initial investment.",[{label:"Net gain / loss",value:money(gain)},{label:"Initial investment",value:money(inv)},{label:"Total costs",value:money(n("costs"))}]);}
- case "apr": {const p=n("principal"),fee=n("fees"),r=n("rate")/1200,m=n("years")*12,monthly=pmt(p,r,m),net=p-fee,apr=(Math.pow(monthly/(net*(r===0?1/m:r/(1-Math.pow(1+r,-m)))),12)-1)*100;return result("Approximate annualized borrowing cost",`${fmt(apr)}%`,"Simplified fee-adjusted estimate; legal APR methods can include additional timing and fee rules.",[{label:"Scheduled monthly payment",value:money(monthly)},{label:"Net amount received",value:money(net)},{label:"Upfront fees",value:money(fee)}]);}
+ case "roi": {
+  const investment=n("investment"),gain=n("value")-investment-n("costs"),roi=gain/investment*100;
+  return result("Return on investment",`${fmt(roi)}%`,"Simple ROI is net gain divided by initial investment; it does not account for the timing of cash flows.",[{label:"Net gain / loss",value:money(gain)},{label:"Initial investment",value:money(investment)},{label:"Final value / proceeds",value:money(n("value"))},{label:"Additional costs",value:money(n("costs"))}]);
+ }
+ case "irr": {
+  const investment=n("investment"),terminal=n("value")-n("costs"),annualCash=n("cashFlow"),years=Math.max(1,Math.round(n("years")));
+  if(terminal<0)throw new Error("Final proceeds after costs cannot be negative.");
+  const npv=(rate:number)=>{let value=-investment;for(let year=1;year<=years;year++)value+=annualCash/Math.pow(1+rate,year);value+=terminal/Math.pow(1+rate,years);return value;};
+  let low=-.9999,high=1;while(npv(low)*npv(high)>0&&high<1e6)high=high*2+1;
+  if(npv(low)*npv(high)>0)throw new Error("IRR cannot be determined because the cash flows do not produce a rate of return.");
+  for(let i=0;i<200;i++){const mid=(low+high)/2;if(npv(low)*npv(mid)<=0)high=mid;else low=mid;}
+  const irr=(low+high)/2*100;
+  return result("Internal rate of return (IRR)",`${fmt(irr)}%`,"IRR is the annual discount rate that makes the net present value of the entered cash-flow stream zero. Assumes equal annual cash flows at year-end.",[{label:"Initial investment",value:money(investment)},{label:"Annual net cash flow",value:money(annualCash)},{label:"Terminal proceeds after costs",value:money(terminal)},{label:"Holding period",value:`${years} years`},{label:"NPV at calculated IRR",value:money(npv(irr/100))}]);
+ }
+ case "apr": {
+  const principal=n("principal"),fee=n("fees"),nominal=n("rate"),months=Math.max(1,Math.round(n("years")*12)),net=principal-fee,contractRate=nominal/1200,monthlyPayment=pmt(principal,contractRate,months);
+  if(net<=0)throw new Error("Upfront fees must be less than the loan principal.");
+  const pv=(monthlyRate:number)=>monthlyRate===0?monthlyPayment*months:monthlyPayment*(1-Math.pow(1+monthlyRate,-months))/monthlyRate;
+  let low=-.999999,high=1;while(pv(high)>net&&high<1e6)high=high*2+.01;
+  if(pv(high)>net)throw new Error("Unable to solve the fee-adjusted APR for these inputs.");
+  for(let i=0;i<160;i++){const mid=(low+high)/2;if(pv(mid)>net)low=mid;else high=mid;}
+  const monthlyApr=(low+high)/2,apr=monthlyApr*12*100;
+  return result("Estimated fee-adjusted APR",`${fmt(apr)}%`,"Solves the monthly internal rate that discounts scheduled payments to the net amount received, then annualizes it. Statutory APR disclosures may include additional fees and timing rules.",[{label:"Scheduled monthly payment",value:money(monthlyPayment)},{label:"Net amount received",value:money(net)},{label:"Upfront fees",value:money(fee)},{label:"Nominal interest rate",value:`${fmt(nominal)}%`},{label:"Effective annual rate (illustrative)",value:`${fmt((Math.pow(1+monthlyApr,12)-1)*100)}%`}]);
+ }
  case "down-payment": {const price=n("price"),down=price*n("down")/100;return result("Required down payment",money(down),"Purchase price multiplied by the selected down-payment percentage.",[{label:"Down payment percentage",value:`${fmt(n("down"))}%`},{label:"Estimated financed amount",value:money(price-down)},{label:"Purchase price",value:money(price)}],[{label:"Down payment",value:down},{label:"Financed amount",value:price-down}]);}
- case "rent-vs-buy": {const rent=n("rent")*12*n("years"),loan=n("price")-n("down"),r=n("rate")/1200,m=n("years")*12,payment=pmt(loan,r,m),buy=payment*m+n("down");return result(rent<buy?"Renting has lower modeled cash outlay":"Buying has lower modeled cash outlay",money(Math.abs(rent-buy)),"Simplified cash-outlay comparison; excludes home appreciation, rent increases, taxes, maintenance and investment returns.",[{label:"Rent paid over period",value:money(rent)},{label:"Mortgage payments plus down payment",value:money(buy)},{label:"Modeled difference",value:money(Math.abs(rent-buy))}]);}
+ case "rent-vs-buy": {
+  const comparisonMonths=Math.max(1,Math.round(n("years")*12)),mortgageMonths=Math.max(1,Math.round(n("mortgageYears")*12)),loan=Math.max(0,n("price")-n("down")),rate=n("rate")/1200,payment=loan===0?0:pmt(loan,rate,mortgageMonths),monthsPaid=Math.min(comparisonMonths,mortgageMonths);
+  let remaining=loan,paid=0;for(let month=0;month<monthsPaid;month++){const interest=remaining*rate,principalPaid=Math.min(remaining,Math.max(0,payment-interest));paid+=Math.min(payment,remaining+interest);remaining=Math.max(0,remaining+interest-principalPaid);}
+  const principalRepaid=loan-remaining,buyNetCost=n("down")+paid-principalRepaid,rent=n("rent")*comparisonMonths;
+  return result(rent<buyNetCost?"Renting has lower modeled net cost":"Buying has lower modeled net cost",money(Math.abs(rent-buyNetCost)),"Compares rent over the selected comparison period with mortgage payments and down payment, less principal repaid (equity accumulated). Mortgage payments use the separate amortization term. Excludes appreciation, rent increases, taxes, insurance, maintenance, transaction costs and investment returns.",[{label:"Rent paid over comparison period",value:money(rent)},{label:"Monthly mortgage payment",value:money(payment)},{label:"Mortgage payments during comparison",value:money(paid)},{label:"Principal repaid / equity added",value:money(principalRepaid)},{label:"Net modeled buying cost",value:money(buyNetCost)},{label:"Remaining mortgage balance",value:money(remaining)}]);
+ }
  case "payback": {const years=n("investment")/n("annual");return result("Payback period",`${fmt(years,2)} years`,"Initial investment divided by constant annual net cash flow.",[{label:"Initial investment",value:money(n("investment"))},{label:"Annual net cash flow",value:money(n("annual"))},{label:"Approximate months",value:fmt(years*12,1)}]);}
  case "present-value": {const pv=n("future")/Math.pow(1+n("rate")/100,n("years"));return result("Present value",money(pv),"Discounts the future amount at the entered annual rate.",[{label:"Future amount",value:money(n("future"))},{label:"Discount rate",value:`${fmt(n("rate"))}%`},{label:"Discount amount",value:money(n("future")-pv)}]);}
  case "future-value": {const fv=n("present")*Math.pow(1+n("rate")/100,n("years"));return result("Future value",money(fv),"Compounds the present amount annually at the entered rate.",[{label:"Present amount",value:money(n("present"))},{label:"Growth",value:money(fv-n("present"))},{label:"Growth rate",value:`${fmt(n("rate"))}%`}]);}
@@ -210,14 +265,14 @@ const specs = [
   {
     "slug": "pension",
     "name": "Pension Calculator",
-    "description": "Calculate and explore pension scenarios with transparent assumptions and an interactive result summary.",
-    "kind": "annuity"
+    "description": "Estimate the present value of pension payments using explicit duration, COLA and discount assumptions.",
+    "kind": "benefit-stream"
   },
   {
     "slug": "social-security",
     "name": "Social Security Calculator",
-    "description": "Calculate and explore social security scenarios with transparent assumptions and an interactive result summary.",
-    "kind": "annuity"
+    "description": "Estimate the present value of Social Security benefits using explicit duration, COLA and discount assumptions.",
+    "kind": "benefit-stream"
   },
   {
     "slug": "annuity",
@@ -240,8 +295,8 @@ const specs = [
   {
     "slug": "credit-cards-payoff",
     "name": "Credit Cards Payoff Calculator",
-    "description": "Calculate and explore credit cards payoff scenarios with transparent assumptions and an interactive result summary.",
-    "kind": "debt-payoff"
+    "description": "Estimate credit-card payoff time and total interest using a month-by-month balance schedule.",
+    "kind": "credit-card"
   },
   {
     "slug": "debt-payoff",
@@ -420,8 +475,8 @@ const specs = [
   {
     "slug": "irr",
     "name": "IRR Calculator",
-    "description": "Calculate and explore irr scenarios with transparent assumptions and an interactive result summary.",
-    "kind": "roi"
+    "description": "Calculate internal rate of return from initial investment, annual cash flows and terminal proceeds.",
+    "kind": "irr"
   },
   {
     "slug": "roi",

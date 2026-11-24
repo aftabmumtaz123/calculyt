@@ -2,11 +2,11 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, RotateCcw, Sparkles, Copy, Check } from "lucide-react";
-import { calculators, calculate } from "@/lib/calculators/definitions";
+import { getCalculator, calculate } from "@/lib/calculators/definitions";
 import type { CalculationResult } from "@/lib/calculators/types";
 import { ResultChart } from "./ResultChart";
 export function CalculatorClient({slug}:{slug:string}){
- const def=calculators.find(x=>x.slug===slug)!;
+ const def=getCalculator(slug)!;
  const initial=useMemo(()=>Object.fromEntries(def.fields.map(f=>[f.name,f.defaultValue])),[def]);
  const [values,setValues]=useState<Record<string,string>>(initial),[result,setResult]=useState<CalculationResult|null>(null),[error,setError]=useState(""),[copied,setCopied]=useState(false);
  function run(e?:React.FormEvent<HTMLFormElement>){
