@@ -16,13 +16,13 @@ A modern Next.js App Router + TypeScript calculator platform with a responsive U
 
 ## Implemented calculator inventory
 
-| Category | Implemented | Catalog total |
-|---|---:|---:|
-| Financial | 75 | 75 |
-| Health & Fitness | 31 | 31 |
-| Math | 44 | 44 |
-| Other | 4 directory-linked (+ 2 legacy tools) | 54 |
-| **Total** | **156 registered (154 directory-linked)** | **204** |
+| Category         |                               Implemented | Catalog total |
+| ---------------- | ----------------------------------------: | ------------: |
+| Financial        |                                        75 |            75 |
+| Health & Fitness |                                        31 |            31 |
+| Math             |                                        44 |            44 |
+| Other            |     4 directory-linked (+ 2 legacy tools) |            54 |
+| **Total**        | **156 registered (154 directory-linked)** |       **204** |
 
 The project catalog contains 44 Math entries. An earlier research inventory document had listed 45; the inventory has now been reconciled to the actual catalog. The remaining 50 Other directory entries are still planned. Two existing legacy tools (Date Difference and Length Converter) remain accessible under their current slugs but do not yet match the catalog's Date Calculator and Conversion Calculator labels.
 
@@ -89,6 +89,6 @@ Calculation functions are kept in typed category modules and registered through 
 
 See `CALCULYT_QA_FIX_REPORT.md` for the code changes made against the 15-issue Professional QA Bug Report. After installing dependencies, run `npm run typecheck`, `npm test`, and `npm run build`. Re-test mobile widths (320, 375, 390, 430px), response headers, canonical URLs, redirect behavior, keyboard navigation, and contrast on the deployed environment before closing the QA tickets.
 
-
 ## Latest UI fix — calculator search dialog
+
 The search dialog now renders in a document-level portal so the sticky header and its backdrop blur cannot trap the overlay beneath homepage content. The dialog is viewport-bounded and its results list scrolls independently. See `CALCULYT_SEARCH_MODAL_LAYOUT_FIX.md`.
