@@ -1,5 +1,4 @@
 node_modules
-.next
-out
+next
 dist
-.env
+env

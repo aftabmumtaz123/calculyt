@@ -1,11 +1,9 @@
 # Calculyt Financial QA Remediation
 
 ## Scope
-
 This update addresses the reported financial-calculator findings BUG-001 through BUG-009 and BUG-013 using the latest Calculyt source archive available in this conversation.
 
 ## Changes
-
 - **BUG-001 — APR:** Replaced the prior ad-hoc fee adjustment with a numerical monthly-rate solution. The scheduled loan payment is discounted to the net proceeds (principal less upfront fees); the solved periodic rate is annualized. The UI copy clarifies that statutory APR may include additional fee/timing rules.
 - **BUG-002 — Credit card payoff:** Uses month-by-month interest accrual and balance reduction, including a smaller final payment. The Credit Cards Payoff calculator now has a dedicated APR field.
 - **BUG-003 — Debt payoff:** Uses the same monthly amortization loop and reports total interest, total paid, payoff duration and final payment. Extra payments are applied to the generic payoff calculator.
@@ -18,7 +16,6 @@ This update addresses the reported financial-calculator findings BUG-001 through
 - **BUG-013 — Default values:** Added a regression test that executes every Financial calculator using its shipped default inputs.
 
 ## Verification performed
-
 - Strict TypeScript check of calculator engine modules: **passed**.
 - Transpilation of calculator engine modules to JavaScript: **passed**.
 - Runtime regression checks for APR, credit-card payoff, debt payoff, rental NOI, house affordability, rent-vs-buy, pension/Social Security, IRR and loan aliases: **passed**.
@@ -26,7 +23,6 @@ This update addresses the reported financial-calculator findings BUG-001 through
 - ZIP archive integrity: verified after packaging.
 
 ## Assumptions and limitations
-
 - APR is an estimated fee-adjusted annualized periodic rate for equal monthly payments. Actual legal APR disclosure rules may require additional fees, payment timing and jurisdiction-specific treatment.
 - House affordability uses illustrative 28% front-end and 36% total-debt ratios, not lender underwriting.
 - Rent-vs-buy is a simplified net-cost comparison that subtracts principal repaid as equity; it excludes property appreciation, taxes, insurance, maintenance, transaction costs, rent increases and investment returns.

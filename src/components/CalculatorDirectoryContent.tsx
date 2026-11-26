@@ -1,77 +1,9 @@
 "use client";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { calculators, categories } from "@/lib/calculators/definitions";
-export default function CalculatorDirectoryContent() {
-  const [query, setQuery] = useState(""),
-    [category, setCategory] = useState("All");
-  const filtered = useMemo(
-    () =>
-      calculators.filter(
-        (c) =>
-          (category === "All" || c.category === category) &&
-          (!query.trim() ||
-            `${c.name} ${c.description}`
-              .toLowerCase()
-              .includes(query.trim().toLowerCase())),
-      ),
-    [query, category],
-  );
-  return (
-    <div>
-      <div className="mb-6 grid gap-3 md:grid-cols-[minmax(0,1fr)_auto]">
-        <input
-          className="field"
-          type="search"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search by calculator name or description..."
-          aria-label="Search all calculators"
-        />
-        <div className="flex flex-wrap gap-2" aria-label="Filter by category">
-          <button
-            onClick={() => setCategory("All")}
-            className={`rounded-full px-4 py-2 text-sm font-semibold ${category === "All" ? "bg-[#211444] text-white" : "border border-[#e8e5ef] bg-white"}`}
-          >
-            All
-          </button>
-          {categories.map((c) => (
-            <button
-              key={c.name}
-              onClick={() => setCategory(c.name)}
-              className={`rounded-full px-4 py-2 text-sm font-semibold ${category === c.name ? "bg-[#211444] text-white" : "border border-[#e8e5ef] bg-white"}`}
-            >
-              {c.name}
-            </button>
-          ))}
-        </div>
-      </div>
-      <p className="mb-4 text-sm text-muted" aria-live="polite">
-        {filtered.length} calculator{filtered.length === 1 ? "" : "s"} found
-      </p>
-      {filtered.length ? (
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((c) => (
-            <Link
-              key={c.slug}
-              href={`/calculators/${c.slug}`}
-              className="group min-w-0 rounded-2xl border border-[#eeebf3] bg-white p-4 transition hover:border-violet-200 hover:shadow-soft"
-            >
-              <span className="block truncate text-sm font-bold">{c.name}</span>
-              <span className="mt-1 block text-xs font-semibold text-violet-600">
-                {c.category}
-              </span>
-              <span className="mt-2 block text-xs leading-5 text-muted">
-                {c.description}
-              </span>
-            </Link>
-          ))}
-        </div>
-      ) : (
-        <p className="rounded-2xl border border-dashed border-[#ddd7e9] p-8 text-center text-sm text-muted">
-          No calculators match your search. Try a different term or category.
-        </p>
-      )}
-    </div>
-  );
+import { calculators,categories } from "@/lib/calculators/definitions";
+export default function CalculatorDirectoryContent(){
+ const [query,setQuery]=useState(""),[category,setCategory]=useState("All");
+ const filtered=useMemo(()=>calculators.filter(c=>(category==="All"||c.category===category)&&(!query.trim()||`${c.name} ${c.description}`.toLowerCase().includes(query.trim().toLowerCase()))),[query,category]);
+ return <div><div className="mb-6 grid gap-3 md:grid-cols-[minmax(0,1fr)_auto]"><input className="field" type="search" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search by calculator name or description..." aria-label="Search all calculators"/><div className="flex flex-wrap gap-2" aria-label="Filter by category"><button onClick={()=>setCategory("All")} className={`rounded-full px-4 py-2 text-sm font-semibold ${category==="All"?"bg-[#211444] text-white":"border border-[#e8e5ef] bg-white"}`}>All</button>{categories.map(c=><button key={c.name} onClick={()=>setCategory(c.name)} className={`rounded-full px-4 py-2 text-sm font-semibold ${category===c.name?"bg-[#211444] text-white":"border border-[#e8e5ef] bg-white"}`}>{c.name}</button>)}</div></div><p className="mb-4 text-sm text-muted" aria-live="polite">{filtered.length} calculator{filtered.length===1?"":"s"} found</p>{filtered.length?<div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{filtered.map(c=><Link key={c.slug} href={`/calculators/${c.slug}`} className="group min-w-0 rounded-2xl border border-[#eeebf3] bg-white p-4 transition hover:border-violet-200 hover:shadow-soft"><span className="block truncate text-sm font-bold">{c.name}</span><span className="mt-1 block text-xs font-semibold text-violet-600">{c.category}</span><span className="mt-2 block text-xs leading-5 text-muted">{c.description}</span></Link>)}</div>:<p className="rounded-2xl border border-dashed border-[#ddd7e9] p-8 text-center text-sm text-muted">No calculators match your search. Try a different term or category.</p>}</div>;
 }
