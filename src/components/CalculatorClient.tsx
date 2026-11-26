@@ -5,32 +5,276 @@ import { ArrowLeft, RotateCcw, Sparkles, Copy, Check } from "lucide-react";
 import { getCalculator, calculate } from "@/lib/calculators/definitions";
 import type { CalculationResult } from "@/lib/calculators/types";
 import { ResultChart } from "./ResultChart";
-export function CalculatorClient({slug}:{slug:string}){
- const def=getCalculator(slug)!;
- const initial=useMemo(()=>Object.fromEntries(def.fields.map(f=>[f.name,f.defaultValue])),[def]);
- const [values,setValues]=useState<Record<string,string>>(initial),[result,setResult]=useState<CalculationResult|null>(null),[error,setError]=useState(""),[copied,setCopied]=useState(false);
- function run(e?:React.FormEvent<HTMLFormElement>){
-  e?.preventDefault();
-  try{
-   setError("");setResult(null);
-   for(const field of def.fields){
-    const raw=values[field.name]??"";
-    if(raw.trim()==="")throw new Error(`${field.label} is required.`);
-    if(field.type==="number"){
-     const value=Number(raw);
-     if(!Number.isFinite(value))throw new Error(`${field.label} must be a valid number.`);
-     if(field.min!==undefined&&value<field.min)throw new Error(`${field.label} must be at least ${field.min}.`);
-     if(field.max!==undefined&&value>field.max)throw new Error(`${field.label} must be no more than ${field.max}.`);
+export function CalculatorClient({ slug }: { slug: string }) {
+  const def = getCalculator(slug)!;
+  const initial = useMemo(
+    () => Object.fromEntries(def.fields.map((f) => [f.name, f.defaultValue])),
+    [def],
+  );
+  const [values, setValues] = useState<Record<string, string>>(initial),
+    [result, setResult] = useState<CalculationResult | null>(null),
+    [error, setError] = useState(""),
+    [copied, setCopied] = useState(false);
+  function run(e?: React.FormEvent<HTMLFormElement>) {
+    e?.preventDefault();
+    try {
+      setError("");
+      setResult(null);
+      for (const field of def.fields) {
+        const raw = values[field.name] ?? "";
+        if (raw.trim() === "") throw new Error(`${field.label} is required.`);
+        if (field.type === "number") {
+          const value = Number(raw);
+          if (!Number.isFinite(value))
+            throw new Error(`${field.label} must be a valid number.`);
+          if (field.min !== undefined && value < field.min)
+            throw new Error(`${field.label} must be at least ${field.min}.`);
+          if (field.max !== undefined && value > field.max)
+            throw new Error(
+              `${field.label} must be no more than ${field.max}.`,
+            );
+        }
+      }
+      if (slug === "compound-interest" && Number(values.principal) <= 0)
+        throw new Error("Initial deposit must be greater than zero.");
+      if (slug === "mortgage" && Number(values.price) <= 0)
+        throw new Error("Home price must be greater than zero.");
+      const plausible: Record<
+        string,
+        { min: number; max: number; label: string }
+      > = {
+        weight: { min: 2, max: 500, label: "Weight" },
+        height: { min: 50, max: 250, label: "Height" },
+        age: { min: 2, max: 120, label: "Age" },
+      };
+      for (const [key, range] of Object.entries(plausible)) {
+        if (key in values) {
+          const n = Number(values[key]);
+          if (n < range.min || n > range.max)
+            throw new Error(
+              `${range.label} must be between ${range.min} and ${range.max} ${key === "age" ? "years" : "units"}.`,
+            );
+        }
+      }
+      setResult(calculate(slug, values));
+    } catch (e) {
+      setResult(null);
+      setError(
+        e instanceof Error
+          ? e.message
+          : "Unable to calculate with these values.",
+      );
     }
-   }
-   if(slug==="compound-interest"&&Number(values.principal)<=0)throw new Error("Initial deposit must be greater than zero.");
-   if(slug==="mortgage"&&Number(values.price)<=0)throw new Error("Home price must be greater than zero.");
-   const plausible:Record<string,{min:number;max:number;label:string}>={weight:{min:2,max:500,label:"Weight"},height:{min:50,max:250,label:"Height"},age:{min:2,max:120,label:"Age"}};
-   for(const [key,range] of Object.entries(plausible)){if(key in values){const n=Number(values[key]);if(n<range.min||n>range.max)throw new Error(`${range.label} must be between ${range.min} and ${range.max} ${key==="age"?"years":"units"}.`);}}
-   setResult(calculate(slug,values));
-  }catch(e){setResult(null);setError(e instanceof Error?e.message:"Unable to calculate with these values.");}
- }
- function reset(){setValues(initial);setResult(null);setError("");}
- async function copy(){if(!result)return;try{await navigator.clipboard.writeText(`${def.name}\n${result.headline}: ${result.value}\n${result.description}`);setCopied(true);window.setTimeout(()=>setCopied(false),1500);}catch{setError("Clipboard access is unavailable. You can select and copy the result manually.");}}
- return <div className="container-shell py-8 md:py-12"><Link href="/" className="mb-7 inline-flex items-center gap-2 text-sm text-muted hover:text-violet-600"><ArrowLeft size={16} aria-hidden="true"/> All calculators</Link><div className="mb-8 max-w-3xl"><div className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-[.16em] text-violet-600"><Sparkles size={14} aria-hidden="true"/>{def.category} tool</div><h1 className="text-3xl font-extrabold md:text-5xl">{def.name}</h1><p className="mt-3 max-w-2xl text-base leading-7 text-muted">{def.description}</p></div><div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,.9fr)]"><section className="card min-w-0 p-5 md:p-7"><div className="mb-6 flex items-center justify-between gap-3"><div><h2 className="text-xl font-bold">Your parameters</h2><p className="mt-1 text-sm text-muted">Enter values to calculate your result.</p></div><span className="rounded-full bg-violet-50 px-3 py-1.5 text-xs font-semibold text-violet-700">Inputs</span></div><form onSubmit={run} noValidate><div className="grid gap-5 sm:grid-cols-2">{def.fields.map(field=><label key={field.name} className="block min-w-0"><span className="mb-2 block text-sm font-semibold">{field.label}{field.unit&&<span className="ml-1 font-normal text-muted">({field.unit})</span>}</span>{field.type==="select"?<select required className="field" value={values[field.name]} onChange={e=>setValues({...values,[field.name]:e.target.value})}>{field.options?.map(o=><option key={o.value} value={o.value}>{o.label}</option>)}</select>:<input required className="field" type={field.type} min={field.min??(field.type==="number"?0:undefined)} max={field.max} step={field.step??"any"} value={values[field.name]} onChange={e=>setValues({...values,[field.name]:e.target.value})}/ >}{field.help&&<span className="mt-1 block text-xs text-muted">{field.help}</span>}</label>)}</div>{error&&<p role="alert" aria-live="polite" className="mt-5 rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}<div className="mt-7 flex flex-wrap gap-3"><button type="submit" className="btn-primary min-w-36">Calculate result</button><button type="button" onClick={reset} className="inline-flex items-center gap-2 rounded-xl border border-[#e8e5ef] px-4 py-3 text-sm font-semibold hover:bg-[#faf9fc]"><RotateCcw size={15} aria-hidden="true"/> Reset</button></div></form></section><section className="card min-w-0 p-5 md:p-7"><div className="flex items-center justify-between gap-3"><div><span className="text-xs font-bold uppercase tracking-[.15em] text-violet-600">Your result</span><h2 className="mt-1 text-xl font-bold">Calculation summary</h2></div>{result&&<button type="button" onClick={copy} aria-label="Copy result" className="rounded-xl border border-[#e8e5ef] p-2.5 text-muted hover:text-violet-600">{copied?<Check size={17} aria-hidden="true"/>:<Copy size={17} aria-hidden="true"/>}</button>}</div>{result?<><div className="mt-7 rounded-2xl bg-[#f5f1fc] p-5"><p className="text-sm font-medium text-[#746d86]">{result.headline}</p><p className="mt-2 break-words text-2xl font-extrabold tracking-tight text-[#56349a] sm:text-3xl md:text-4xl">{result.value}</p><p className="mt-2 text-sm text-muted">{result.description}</p></div><div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">{result.metrics.map(m=><div key={m.label} className="min-w-0 rounded-xl border border-[#efedf4] p-4"><p className="text-xs text-muted">{m.label}</p><p className="mt-1 break-words text-lg font-bold">{m.value}</p></div>)}</div><ResultChart result={result}/>{result.note&&<p className="mt-5 rounded-xl bg-[#faf9fc] p-4 text-xs leading-5 text-muted">{result.note}</p>}</>:<div className="flex min-h-[285px] flex-col items-center justify-center text-center"><div className="grid h-14 w-14 place-items-center rounded-2xl bg-violet-50 text-violet-600"><Sparkles size={23} aria-hidden="true"/></div><h3 className="mt-4 font-bold">Your results will appear here</h3><p className="mt-2 max-w-xs text-sm leading-6 text-muted">Adjust the parameters and select Calculate result to see your breakdown.</p></div>}</section></div><div className="mt-8 grid gap-5 md:grid-cols-2"><article className="card p-6"><h3 className="font-bold">How this calculator works</h3><p className="mt-2 text-sm leading-6 text-muted">{def.description} The calculation runs locally in your browser, so your entered values are not sent to a server.</p></article><article className="card p-6"><h3 className="font-bold">Important note</h3><p className="mt-2 text-sm leading-6 text-muted">Results are estimates for informational purposes. Check the assumptions and limitations shown with your result before making financial, medical or other important decisions.</p></article></div></div>;
+  }
+  function reset() {
+    setValues(initial);
+    setResult(null);
+    setError("");
+  }
+  async function copy() {
+    if (!result) return;
+    try {
+      await navigator.clipboard.writeText(
+        `${def.name}\n${result.headline}: ${result.value}\n${result.description}`,
+      );
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1500);
+    } catch {
+      setError(
+        "Clipboard access is unavailable. You can select and copy the result manually.",
+      );
+    }
+  }
+  return (
+    <div className="container-shell py-8 md:py-12">
+      <Link
+        href="/"
+        className="mb-7 inline-flex items-center gap-2 text-sm text-muted hover:text-violet-600"
+      >
+        <ArrowLeft size={16} aria-hidden="true" /> All calculators
+      </Link>
+      <div className="mb-8 max-w-3xl">
+        <div className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-[.16em] text-violet-600">
+          <Sparkles size={14} aria-hidden="true" />
+          {def.category} tool
+        </div>
+        <h1 className="text-3xl font-extrabold md:text-5xl">{def.name}</h1>
+        <p className="mt-3 max-w-2xl text-base leading-7 text-muted">
+          {def.description}
+        </p>
+      </div>
+      <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,.9fr)]">
+        <section className="card min-w-0 p-5 md:p-7">
+          <div className="mb-6 flex items-center justify-between gap-3">
+            <div>
+              <h2 className="text-xl font-bold">Your parameters</h2>
+              <p className="mt-1 text-sm text-muted">
+                Enter values to calculate your result.
+              </p>
+            </div>
+            <span className="rounded-full bg-violet-50 px-3 py-1.5 text-xs font-semibold text-violet-700">
+              Inputs
+            </span>
+          </div>
+          <form onSubmit={run} noValidate>
+            <div className="grid gap-5 sm:grid-cols-2">
+              {def.fields.map((field) => (
+                <label key={field.name} className="block min-w-0">
+                  <span className="mb-2 block text-sm font-semibold">
+                    {field.label}
+                    {field.unit && (
+                      <span className="ml-1 font-normal text-muted">
+                        ({field.unit})
+                      </span>
+                    )}
+                  </span>
+                  {field.type === "select" ? (
+                    <select
+                      required
+                      className="field"
+                      value={values[field.name]}
+                      onChange={(e) =>
+                        setValues({ ...values, [field.name]: e.target.value })
+                      }
+                    >
+                      {field.options?.map((o) => (
+                        <option key={o.value} value={o.value}>
+                          {o.label}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    <input
+                      required
+                      className="field"
+                      type={field.type}
+                      min={
+                        field.min ?? (field.type === "number" ? 0 : undefined)
+                      }
+                      max={field.max}
+                      step={field.step ?? "any"}
+                      value={values[field.name]}
+                      onChange={(e) =>
+                        setValues({ ...values, [field.name]: e.target.value })
+                      }
+                    />
+                  )}
+                  {field.help && (
+                    <span className="mt-1 block text-xs text-muted">
+                      {field.help}
+                    </span>
+                  )}
+                </label>
+              ))}
+            </div>
+            {error && (
+              <p
+                role="alert"
+                aria-live="polite"
+                className="mt-5 rounded-xl bg-red-50 p-3 text-sm text-red-700"
+              >
+                {error}
+              </p>
+            )}
+            <div className="mt-7 flex flex-wrap gap-3">
+              <button type="submit" className="btn-primary min-w-36">
+                Calculate result
+              </button>
+              <button
+                type="button"
+                onClick={reset}
+                className="inline-flex items-center gap-2 rounded-xl border border-[#e8e5ef] px-4 py-3 text-sm font-semibold hover:bg-[#faf9fc]"
+              >
+                <RotateCcw size={15} aria-hidden="true" /> Reset
+              </button>
+            </div>
+          </form>
+        </section>
+        <section className="card min-w-0 p-5 md:p-7">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-[.15em] text-violet-600">
+                Your result
+              </span>
+              <h2 className="mt-1 text-xl font-bold">Calculation summary</h2>
+            </div>
+            {result && (
+              <button
+                type="button"
+                onClick={copy}
+                aria-label="Copy result"
+                className="rounded-xl border border-[#e8e5ef] p-2.5 text-muted hover:text-violet-600"
+              >
+                {copied ? (
+                  <Check size={17} aria-hidden="true" />
+                ) : (
+                  <Copy size={17} aria-hidden="true" />
+                )}
+              </button>
+            )}
+          </div>
+          {result ? (
+            <>
+              <div className="mt-7 rounded-2xl bg-[#f5f1fc] p-5">
+                <p className="text-sm font-medium text-[#746d86]">
+                  {result.headline}
+                </p>
+                <p className="mt-2 break-words text-2xl font-extrabold tracking-tight text-[#56349a] sm:text-3xl md:text-4xl">
+                  {result.value}
+                </p>
+                <p className="mt-2 text-sm text-muted">{result.description}</p>
+              </div>
+              <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                {result.metrics.map((m) => (
+                  <div
+                    key={m.label}
+                    className="min-w-0 rounded-xl border border-[#efedf4] p-4"
+                  >
+                    <p className="text-xs text-muted">{m.label}</p>
+                    <p className="mt-1 break-words text-lg font-bold">
+                      {m.value}
+                    </p>
+                  </div>
+                ))}
+              </div>
+              <ResultChart result={result} />
+              {result.note && (
+                <p className="mt-5 rounded-xl bg-[#faf9fc] p-4 text-xs leading-5 text-muted">
+                  {result.note}
+                </p>
+              )}
+            </>
+          ) : (
+            <div className="flex min-h-[285px] flex-col items-center justify-center text-center">
+              <div className="grid h-14 w-14 place-items-center rounded-2xl bg-violet-50 text-violet-600">
+                <Sparkles size={23} aria-hidden="true" />
+              </div>
+              <h3 className="mt-4 font-bold">Your results will appear here</h3>
+              <p className="mt-2 max-w-xs text-sm leading-6 text-muted">
+                Adjust the parameters and select Calculate result to see your
+                breakdown.
+              </p>
+            </div>
+          )}
+        </section>
+      </div>
+      <div className="mt-8 grid gap-5 md:grid-cols-2">
+        <article className="card p-6">
+          <h3 className="font-bold">How this calculator works</h3>
+          <p className="mt-2 text-sm leading-6 text-muted">
+            {def.description} The calculation runs locally in your browser, so
+            your entered values are not sent to a server.
+          </p>
+        </article>
+        <article className="card p-6">
+          <h3 className="font-bold">Important note</h3>
+          <p className="mt-2 text-sm leading-6 text-muted">
+            Results are estimates for informational purposes. Check the
+            assumptions and limitations shown with your result before making
+            financial, medical or other important decisions.
+          </p>
+        </article>
+      </div>
+    </div>
+  );
 }
